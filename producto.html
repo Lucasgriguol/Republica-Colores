@@ -5,361 +5,121 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pinturería — Detalle de producto</title>
-
-  <!-- Link al CSS global -->
   <link rel="stylesheet" href="styles.css">
-
-  <!-- Scoped navbar/footer styles -->
-  <style>
-    .site-header {
-      background: #fff;
-      border-bottom: 1px solid rgba(16, 24, 40, 0.04);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02);
-    }
-
-    .site-header__inner {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 12px 20px;
-      justify-content: space-between;
-    }
-
-    .site-brand .brand-link {
-      color: var(--brand, #1565c0);
-      font-weight: 800;
-      font-size: 18px;
-      text-decoration: none
-    }
-
-    .site-nav__list {
-      display: flex;
-      gap: 14px;
-      list-style: none;
-      margin: 0;
-      padding: 0
-    }
-
-    .site-nav__list a {
-      color: var(--muted, #6b7280);
-      text-decoration: none;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-weight: 600
-    }
-
-    .site-nav__list a:hover {
-      color: var(--brand, #1565c0);
-      background: rgba(21, 101, 192, 0.04)
-    }
-
-    .site-tools {
-      display: flex;
-      align-items: center;
-      gap: 8px
-    }
-
-    .site-search {
-      display: flex;
-      gap: 8px;
-      align-items: center
-    }
-
-    .site-search__input {
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid #e9eef8;
-      min-width: 180px
-    }
-
-    .site-search__btn {
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 0;
-      background: var(--brand, #1565c0);
-      color: #fff;
-      cursor: pointer
-    }
-
-    .site-cart {
-      background: transparent;
-      border: 0;
-      font-size: 18px;
-      cursor: pointer
-    }
-
-    .site-menu-toggle {
-      display: none;
-      background: transparent;
-      border: 0;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px
-    }
-
-    .site-menu {
-      background: #fff;
-      border-top: 1px solid rgba(16, 24, 40, 0.04)
-    }
-
-    .site-footer {
-      background: linear-gradient(180deg, #f8fbff, #fff);
-      border-top: 1px solid rgba(16, 24, 40, 0.03);
-      padding: 20px 0;
-      margin-top: 28px
-    }
-
-    .site-footer__inner {
-      display: grid;
-      grid-template-columns: 1fr 140px 180px 120px;
-      gap: 18px;
-      align-items: start;
-      padding: 10px 20px
-    }
-
-    .site-footer h4 {
-      margin: 0 0 8px 0
-    }
-
-    .site-footer ul {
-      list-style: none;
-      padding: 0;
-      margin: 0
-    }
-
-    .site-footer a {
-      color: var(--brand, #1565c0);
-      text-decoration: none
-    }
-
-    .site-footer__bottom {
-      border-top: 1px solid rgba(16, 24, 40, 0.02);
-      padding: 10px 20px;
-      margin-top: 12px;
-      text-align: center
-    }
-
-    @media (max-width:900px) {
-      .site-nav__list {
-        display: none
-      }
-
-      .site-search__input {
-        min-width: 120px
-      }
-
-      .site-menu-toggle {
-        display: inline-block
-      }
-
-      .site-header__inner {
-        padding: 10px 14px
-      }
-
-      .site-footer__inner {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px
-      }
-    }
-
-    @media (max-width:420px) {
-      .site-footer__inner {
-        grid-template-columns: 1fr;
-        gap: 12px
-      }
-    }
-  </style>
-
-  <!-- Scoped product styles -->
-  <style>
-    .product-page {
-      padding: 28px 0;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: 480px 1fr;
-      gap: 28px;
-      align-items: start;
-    }
-
-    @media (max-width:980px) {
-      .product-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .product-media {
-      background: #fff;
-      padding: 14px;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(16, 24, 40, 0.04);
-      border: 1px solid rgba(16, 24, 40, 0.03);
-    }
-
-    .product-media img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      object-fit: contain;
-      max-height: 420px;
-      display: block;
-    }
-
-    .product-info h1 {
-      margin: 0 0 10px 0;
-      font-size: 26px;
-      color: var(--brand);
-    }
-
-    .product-price {
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--brand);
-      margin: 8px 0;
-    }
-
-    .product-meta {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-
-    .product-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-wide {
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-weight: 800;
-    }
-
-    .product-desc {
-      margin-top: 16px;
-      background: #fff;
-      padding: 14px;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(16, 24, 40, 0.03);
-      border: 1px solid rgba(16, 24, 40, 0.02);
-    }
-
-    .loading-center {
-      text-align: center;
-      padding: 30px;
-      color: var(--muted);
-    }
-  </style>
 </head>
 
 <body>
-
-  <!-- NAVBAR -->
   <header class="site-header" role="banner">
     <div class="site-header__inner container">
-      <div class="site-brand">
-        <a href="index.html" class="brand-link" aria-label="Ir al inicio"><strong>República Colores</strong></a>
-      </div>
-
+      <div class="site-brand"><a href="index.html" class="brand-link">República Colores</a></div>
       <nav class="site-nav" role="navigation" aria-label="Navegación principal">
         <ul class="site-nav__list">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </nav>
-
       <div class="site-tools">
-        <form class="site-search" role="search" onsubmit="event.preventDefault(); doSearchIndex();">
+        <form class="site-search" role="search" onsubmit="event.preventDefault(); applyHeaderSearch();">
           <input id="globalSearch" class="site-search__input" type="search"
             placeholder="Buscar producto, marca o código" aria-label="Buscar">
-          <button type="button" class="site-search__btn" onclick="doSearchIndex()">Buscar</button>
+          <button type="button" class="site-search__btn" onclick="applyHeaderSearch()">Buscar</button>
         </form>
-        <button class="site-cart" aria-label="Ver carrito" onclick="alert('Carrito demo')">🛒</button>
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+        <button id="adminBtn" class="site-admin-btn" title="Admin" aria-label="Admin">🔒</button>
         <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()"
           aria-expanded="false">☰</button>
       </div>
     </div>
-
     <div id="site-menu" class="site-menu" hidden>
       <div class="container">
         <ul class="site-menu__list">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </div>
     </div>
   </header>
 
-  <!-- MAIN: detalle -->
-  <main class="container product-page" id="productPage">
+  <main class="container product-page">
     <div id="productLoader" class="loading-center">Cargando producto…</div>
-
-    <div class="product-grid" role="main" id="productGrid" style="display:none">
-      <div class="product-media" id="mediaCol">
-        <img id="productImage" src="https://via.placeholder.com/800x600?text=Producto" alt="Imagen del producto">
-      </div>
-
+    <div class="product-grid" id="productGrid" style="display:none">
+      <div class="product-media"><img id="productImage" src="https://via.placeholder.com/800x600?text=Producto"
+          alt="Producto"></div>
       <div class="product-info">
         <h1 id="productTitle">Producto de ejemplo</h1>
         <div class="product-price" id="productPrice">$ 1.200</div>
         <div class="product-meta" id="productMeta">Marca: Demo · Presentación: 1 L</div>
-
         <div class="product-actions">
-          <button class="btn btn-primary btn-wide" id="addBtn">Agregar al carrito</button>
           <button class="btn btn-ghost btn-wide" onclick="window.location.href='productos.html'">Volver al
             listado</button>
+          <button class="btn btn" id="reserveBtn">Reservar</button>
         </div>
-
         <div class="product-desc" id="productDesc">
           <h3>Descripción</h3>
-          <p class="small muted">Descripción de ejemplo. Pintura acrílica de alta calidad, buena cubertura y secado
-            rápido. Recomendado para interiores.</p>
-
+          <p class="small muted">Descripción de ejemplo.</p>
           <h4 style="margin-top:12px">Ficha técnica</h4>
           <ul class="small muted" id="productSpecs">
             <li>Rendimiento: ~10 m² / litro</li>
-            <li>Secado: 2 horas al tacto</li>
-            <li>Aplicación: rodillo / brocha / soplete</li>
           </ul>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <div id="adminModalBack" class="admin-modal-back" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="admin-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h2 style="margin:0">Área admin — Reservas</h2>
+          <div class="small muted">Solo para administradores.</div>
+        </div>
+        <div><button id="adminCloseTop" class="btn btn-ghost">Cerrar</button></div>
+      </div>
+      <div id="adminLoginBlock" style="margin-top:14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <input id="adminPinInput" placeholder="Ingresá PIN"
+            style="padding:10px;border-radius:8px;border:1px solid #eef6fb" />
+          <button id="adminLoginBtn" class="btn btn-primary">Entrar</button>
+          <div id="adminLoginMsg" class="small muted" style="margin-left:12px"></div>
+        </div>
+      </div>
+      <div id="adminContent" style="display:none;margin-top:16px">
+        <div class="admin-actions">
+          <button id="adminSignout" class="btn">Cerrar sesión admin</button>
+          <button id="refreshReservations" class="btn btn-primary">Actualizar</button>
+        </div>
+        <div style="margin-top:12px" class="admin-panel" id="adminPanel">
+          <div class="small muted">Cargando reservas…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer" role="contentinfo">
     <div class="site-footer__inner container">
-      <div class="footer-col about">
-        <a href="index.html" class="brand-link"><strong>República Colores</strong></a>
-        <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 20 años.</p>
+      <div class="footer-col about"><a href="index.html" class="brand-link"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones.</p>
       </div>
       <div class="footer-col links">
         <h4>Enlaces</h4>
         <ul>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
-          <li><a href="index.html">Inicio</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </div>
       <div class="footer-col contact">
         <h4>Contacto</h4>
         <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
         <p class="small muted">Tel: +54 351 618 5138</p>
-        <p class="small muted">Email: <a href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
       </div>
       <div class="footer-col social">
         <h4>Síguenos</h4>
-        <div class="social-icons">
-          <a href="#" aria-label="Facebook">👍</a>
-          <a href="#" aria-label="Instagram">📸</a>
+        <div class="social-icons"><a href="#" aria-label="Facebook">👍</a><a href="#" aria-label="Instagram">📸</a>
         </div>
       </div>
     </div>
@@ -368,10 +128,30 @@
     </div>
   </footer>
 
-  <!-- Firebase + logic: obtiene un producto por id -->
   <script type="module">
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu) return;
+      const isHidden = menu.hasAttribute('hidden');
+      if (isHidden) {
+        menu.removeAttribute('hidden');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.setAttribute('hidden', '');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function applyHeaderSearch() {
+      const g = document.getElementById('globalSearch');
+      const q = (g && g.value) ? g.value.trim() : '';
+      if (!q) { location.href = 'productos.html'; return; }
+      location.href = 'productos.html?q=' + encodeURIComponent(q);
+    }
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDPVbxfvJO-w-j6lGL-TEFeHNJRV7G1UTo",
@@ -388,114 +168,94 @@
 
     const productGrid = document.getElementById('productGrid');
     const loader = document.getElementById('productLoader');
+    const reserveBtn = document.getElementById('reserveBtn');
+    const adminBtn = document.getElementById('adminBtn');
+    const adminModalBack = document.getElementById('adminModalBack');
+    const adminCloseTop = document.getElementById('adminCloseTop');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminPinInput = document.getElementById('adminPinInput');
+    const adminLoginMsg = document.getElementById('adminLoginMsg');
+    const adminLoginBlock = document.getElementById('adminLoginBlock');
+    const adminContent = document.getElementById('adminContent');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminSignout = document.getElementById('adminSignout');
+    const refreshReservations = document.getElementById('refreshReservations');
 
-    // util: intenta leer doc por id en varias colecciones
+    const PIN_OFFSET = 11;
+    const encodedPin = [60, 68, 65, 64];
+    function decodePin() { return encodedPin.map(c => String.fromCharCode(c - PIN_OFFSET)).join(''); }
+    function verifyPinInput(value) { return String(value || '').trim() === decodePin(); }
+    function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
     async function findProductById(id) {
       for (const name of COLLECTIONS) {
-        try {
-          const docRef = doc(db, name, id);
-          const snap = await getDoc(docRef);
-          if (snap && snap.exists()) {
-            return { id: snap.id, ...snap.data(), _collection: name };
-          }
-        } catch (e) {
-          console.warn('err find in', name, e);
-        }
+        try { const dref = doc(db, name, id); const snap = await getDoc(dref); if (snap && snap.exists()) return { id: snap.id, ...snap.data(), _collection: name }; } catch (e) { }
       }
-      // fallback: try to search by a field 'slug' or 'code' across first collection(s)
       for (const name of COLLECTIONS) {
-        try {
-          const colRef = collection(db, name);
-          const q = query(colRef, orderBy('name', 'asc'));
-          const snap = await getDocs(q);
-          if (!snap.empty) {
-            for (const d of snap.docs) {
-              const data = d.data();
-              if (data.slug === id || d.id === id || (data.code && data.code === id)) {
-                return { id: d.id, ...data, _collection: name };
-              }
-            }
-          }
-        } catch (e) { console.warn('err search in', name, e) }
+        try { const colRef = collection(db, name); const snap = await getDocs(colRef); if (!snap.empty) { for (const d of snap.docs) { const data = d.data(); if (data.slug === id || d.id === id || (data.code && data.code === id)) return { id: d.id, ...data, _collection: name }; } } } catch (e) { }
       }
       return null;
     }
 
     function populateProductUI(p) {
       if (!p) return;
-      const title = document.getElementById('productTitle');
-      const priceEl = document.getElementById('productPrice');
-      const meta = document.getElementById('productMeta');
-      const img = document.getElementById('productImage');
-      const descP = document.querySelector('#productDesc p');
-      const specs = document.getElementById('productSpecs');
-
-      title.textContent = p.name || p.nombre || p.title || 'Sin nombre';
-      priceEl.textContent = (p.price || p.precio) == null ? 'Consultar' : ('$' + Number(p.price || p.precio).toLocaleString('es-AR'));
-      meta.textContent = (p.brand || p.marca ? 'Marca: ' + (p.brand || p.marca) : '') + (p.presentation ? ' · ' + p.presentation : '');
+      document.getElementById('productTitle').textContent = p.name || p.nombre || p.title || 'Sin nombre';
+      document.getElementById('productPrice').textContent = (p.price || p.precio) == null ? 'Consultar' : '$' + Number(p.price || p.precio).toLocaleString('es-AR');
+      document.getElementById('productMeta').textContent = (p.brand || p.marca ? 'Marca: ' + (p.brand || p.marca) : '') + (p.presentation ? ' · ' + p.presentation : '');
       const imageSrc = p.imageUrl || p.image || (p.images && p.images[0]) || 'https://via.placeholder.com/800x600?text=Sin+imagen';
-      img.src = imageSrc;
-      img.alt = title.textContent;
-      descP.textContent = p.description || p.desc || p.descripcion || 'Descripción no disponible.';
-      // specs (optional fields)
-      specs.innerHTML = '';
-      const specList = [];
-      if (p.rendimiento) specList.push('Rendimiento: ' + p.rendimiento);
-      if (p.drying) specList.push('Secado: ' + p.drying);
-      if (p.application) specList.push('Aplicación: ' + p.application);
-      if (p.tips) specList.push(p.tips);
-      if (specList.length === 0) {
-        specs.innerHTML = '<li class="small muted">Ficha técnica no disponible.</li>';
-      } else {
-        specList.forEach(s => {
-          const li = document.createElement('li'); li.className = 'small muted'; li.textContent = s; specs.appendChild(li);
+      const img = document.getElementById('productImage'); img.src = imageSrc; img.alt = document.getElementById('productTitle').textContent;
+      document.querySelector('#productDesc p').textContent = p.description || p.desc || p.descripcion || 'Descripción no disponible.';
+      const specs = document.getElementById('productSpecs'); specs.innerHTML = '';
+      const specList = []; if (p.rendimiento) specList.push('Rendimiento: ' + p.rendimiento); if (p.drying) specList.push('Secado: ' + p.drying); if (p.application) specList.push('Aplicación: ' + p.application);
+      if (specList.length === 0) specs.innerHTML = '<li class="small muted">Ficha técnica no disponible.</li>'; else specList.forEach(s => { const li = document.createElement('li'); li.className = 'small muted'; li.textContent = s; specs.appendChild(li); });
+    }
+
+    async function loadReservations() {
+      adminPanel.innerHTML = '<div class="small muted">Cargando reservas…</div>';
+      try {
+        const col = collection(db, 'reservas');
+        const snap = await getDocs(col);
+        if (snap.empty) { adminPanel.innerHTML = '<div class="small muted">No hay reservas registradas.</div>'; return; }
+        let html = '<table><thead><tr><th>Nombre</th><th>DNI</th><th>Items</th><th>Total</th><th>Creado</th></tr></thead><tbody>';
+        snap.forEach(d => {
+          const data = d.data();
+          const items = (data.items || []).map(it => `${it.name} x${it.qty}`).join('<br>');
+          const total = data.total == null ? 'Consultar' : '$' + Number(data.total).toLocaleString('es-AR');
+          let created = '';
+          if (data.createdAt && data.createdAt.toDate) { try { created = data.createdAt.toDate().toLocaleString(); } catch (e) { created = String(data.createdAt); } } else created = '-';
+          html += `<tr><td>${escapeHtml(data.name || '-')}</td><td>${escapeHtml(data.dni || '-')}</td><td style="min-width:220px">${items || '-'}</td><td>${total}</td><td>${created}</td></tr>`;
         });
-      }
+        html += '</tbody></table>';
+        adminPanel.innerHTML = html;
+      } catch (err) { adminPanel.innerHTML = '<div class="small muted">Error cargando reservas (ver consola).</div>'; }
     }
 
-    // header/helpers
-    function toggleSiteMenu() {
-      const menu = document.getElementById('site-menu');
-      const btn = document.querySelector('.site-menu-toggle');
-      if (!menu) return;
-      const isHidden = menu.hasAttribute('hidden');
-      if (isHidden) { menu.removeAttribute('hidden'); btn.setAttribute('aria-expanded', 'true'); }
-      else { menu.setAttribute('hidden', ''); btn.setAttribute('aria-expanded', 'false'); }
-    }
-    function doSearchIndex() { var q = document.getElementById('globalSearch') ? document.getElementById('globalSearch').value.trim() : ''; if (!q) return location.href = 'productos.html'; location.href = 'productos.html?q=' + encodeURIComponent(q); }
+    function openAdminModal() { adminModalBack.style.display = 'flex'; adminModalBack.setAttribute('aria-hidden', 'false'); const authed = sessionStorage.getItem('rc_admin_authed'); if (authed === '1') { adminLoginBlock.style.display = 'none'; adminContent.style.display = ''; loadReservations(); } else { adminLoginBlock.style.display = ''; adminContent.style.display = 'none'; adminPinInput.value = ''; adminLoginMsg.textContent = ''; adminPinInput.focus(); } }
+    function closeAdminModal() { adminModalBack.style.display = 'none'; adminModalBack.setAttribute('aria-hidden', 'true'); }
+
+    adminBtn.addEventListener('click', () => openAdminModal());
+    adminCloseTop.addEventListener('click', () => closeAdminModal());
+    adminModalBack.addEventListener('click', (e) => { if (e.target === adminModalBack) closeAdminModal(); });
+    adminLoginBtn && adminLoginBtn.addEventListener('click', () => { const val = adminPinInput.value || ''; if (verifyPinInput(val)) { sessionStorage.setItem('rc_admin_authed', '1'); adminLoginMsg.textContent = ''; adminLoginBlock.style.display = 'none'; adminContent.style.display = ''; loadReservations(); } else { adminLoginMsg.style.color = '#b91c1c'; adminLoginMsg.textContent = 'PIN incorrecto.'; } });
+    adminSignout && adminSignout.addEventListener('click', () => { sessionStorage.removeItem('rc_admin_authed'); adminContent.style.display = 'none'; adminLoginBlock.style.display = ''; adminLoginMsg.textContent = 'Sesión cerrada.'; });
+    refreshReservations && refreshReservations.addEventListener('click', () => loadReservations());
+
+    function goToReserveWithId(id) { if (!id) return; location.href = 'reservas.html?id=' + encodeURIComponent(id); }
+
     document.addEventListener('DOMContentLoaded', async function () {
-      var el = document.getElementById('footerYear'); if (el) el.textContent = new Date().getFullYear();
-
-      // obtener id de querystring
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
       const params = new URLSearchParams(location.search);
-      const id = params.get('id');
-      if (!id) {
-        // si no hay id, mostrar mensaje y ocultar loader
-        loader.textContent = 'No se indicó producto (parámetro ?id=).';
-        return;
-      }
-      // buscar en Firestore
+      const id = params.get('id') || params.get('product') || params.get('sku');
+      if (!id) { loader.textContent = 'No se indicó producto (parámetro ?id=).'; return; }
       loader.textContent = 'Buscando producto…';
       const product = await findProductById(id);
-      if (product) {
-        populateProductUI(product);
-        loader.style.display = 'none';
-        productGrid.style.display = '';
-      } else {
-        // fallback demo: si no lo encontramos, mostramos un demo o mensaje
-        loader.innerHTML = '<div>No se encontró el producto. Mostrando ejemplo.</div>';
-        const demo = {
-          name: 'Pintura Acrílica Interior (demo)',
-          price: 1200,
-          brand: 'Marca Demo',
-          imageUrl: 'https://via.placeholder.com/800x600?text=Producto+Demo',
-          description: 'Demostración: este producto no se encontró en la base de datos.'
-        };
-        populateProductUI(demo);
-        loader.style.display = 'none';
-        productGrid.style.display = '';
-      }
+      if (product) { populateProductUI(product); const reserveBtnEl = document.getElementById('reserveBtn'); if (reserveBtnEl) reserveBtnEl.addEventListener('click', () => goToReserveWithId(product.id || id)); loader.style.display = 'none'; productGrid.style.display = ''; }
+      else { loader.innerHTML = '<div>No se encontró el producto. Mostrando ejemplo.</div>'; const demo = { name: 'Pintura Acrílica Interior (demo)', price: 1200, brand: 'Marca Demo', imageUrl: 'https://via.placeholder.com/800x600?text=Producto+Demo', description: 'Demostración: no se encontró en la base de datos.', id: id }; populateProductUI(demo); const reserveBtnEl = document.getElementById('reserveBtn'); if (reserveBtnEl) reserveBtnEl.addEventListener('click', () => goToReserveWithId(demo.id)); loader.style.display = 'none'; productGrid.style.display = ''; }
     });
+
+    adminPinInput && adminPinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); adminLoginBtn && adminLoginBtn.click(); } if (e.key === 'Escape') { if (adminModalBack.style.display === 'flex') closeAdminModal(); } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (adminModalBack.style.display === 'flex') closeAdminModal(); } });
+    function toggleSiteMenu() { const menu = document.getElementById('site-menu'); const btn = document.querySelector('.site-menu-toggle'); if (!menu) return; const isHidden = menu.hasAttribute('hidden'); if (isHidden) { menu.removeAttribute('hidden'); if (btn) btn.setAttribute('aria-expanded', 'true'); } else { menu.setAttribute('hidden', ''); if (btn) btn.setAttribute('aria-expanded', 'false'); } } function applyHeaderSearch() { const g = document.getElementById('globalSearch'); const q = (g && g.value) ? g.value.trim() : ''; if (!q) { location.href = 'productos.html'; return; } location.href = 'productos.html?q=' + encodeURIComponent(q); } // Admin button: try to open admin modal if function exists in page scope document.addEventListener('DOMContentLoaded', ()=>{ const adminBtn = document.getElementById('adminBtn'); if(!adminBtn) return; adminBtn.addEventListener('click', ()=>{ // if page implements openAdminModal (as in the product/reservas pages), call it if(typeof openAdminModal === 'function') return openAdminModal(); // otherwise, try to open #adminModalBack if present const modal = document.getElementById('adminModalBack'); if(modal){ modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); } else { alert('Área admin: módulo no implementado en esta página.'); } }); });
   </script>
 </body>
 

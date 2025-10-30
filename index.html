@@ -4,12 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pinturería — Inicio</title>
-
-  <!-- Link al CSS global (no lo toco) -->
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Scoped styles: navbar/footer (compartidos) -->
+  <title>Pinturería Republica Colores</title> <!-- Link al CSS global (no lo toco) -->
+  <link rel="stylesheet" href="styles.css"> <!-- Scoped styles: navbar/footer (compartidos) -->
   <style>
     /* Scoped navbar + footer styles (prefijo .site- evita choques) */
     .site-header {
@@ -189,9 +185,7 @@
         gap: 12px
       }
     }
-  </style>
-
-  <!-- Scoped styles exclusive para el home (prefijo .home-) -->
+  </style> <!-- Scoped styles exclusive para el home (prefijo .home-) -->
   <style>
     .home-hero {
       padding: 28px 0;
@@ -337,47 +331,39 @@
   </style>
 </head>
 
-<body>
-
-  <!-- NAVBAR (mejorada) -->
+<body> <!-- NAVBAR (mejorada) -->
   <header class="site-header" role="banner">
     <div class="site-header__inner container">
-      <div class="site-brand">
-        <a href="index.html" class="brand-link" aria-label="Ir al inicio"><strong>República Colores</strong></a>
-      </div>
-
+      <div class="site-brand"> <a href="index.html" class="brand-link">República Colores</a> </div>
       <nav class="site-nav" role="navigation" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html" aria-current="page">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </nav>
-
       <div class="site-tools">
-        <form class="site-search" role="search" onsubmit="event.preventDefault(); doSearchIndex();">
-          <input id="globalSearch" class="site-search__input" type="search"
-            placeholder="Buscar producto, marca o código" aria-label="Buscar">
-          <button type="button" class="site-search__btn" onclick="doSearchIndex()">Buscar</button>
-        </form>
-        <button class="site-cart" aria-label="Ver carrito" onclick="alert('Carrito demo')">🛒</button>
-        <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()"
-          aria-expanded="false">☰</button>
+        <form class="site-search" role="search" onsubmit="event.preventDefault(); applyHeaderSearch();"> <input
+            id="globalSearch" class="site-search__input" type="search" placeholder="Buscar producto, marca o código"
+            aria-label="Buscar"> <button type="button" class="site-search__btn"
+            onclick="applyHeaderSearch()">Buscar</button> </form> <button class="site-reserve"
+          onclick="location.href='reservas.html'">Reservas</button>
+          <!-- <span class="badge">3</span> opcional --> </button> <button class="site-menu-toggle"
+          aria-label="Abrir menú" onclick="toggleSiteMenu()" aria-expanded="false">☰</button>
       </div>
     </div>
-
     <div id="site-menu" class="site-menu" hidden>
       <div class="container">
         <ul class="site-menu__list">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </div>
     </div>
-  </header>
-
-  <!-- MAIN -->
+  </header> <!-- MAIN -->
   <main class="container">
     <section class="home-hero" aria-label="Hero destacado">
       <div class="home-hero-inner">
@@ -386,7 +372,6 @@
             <h1 class="home-hero-title">República <span class="home-brand-highlight">Colores</span></h1>
             <p class="home-hero-sub">Soluciones en pinturas y terminaciones — Más de <strong>20 años</strong> asesorando
               proyectos residenciales y comerciales.</p>
-
             <div class="home-hero-features" aria-hidden="false">
               <div class="home-feature">
                 <div class="home-feature-dot">•</div>
@@ -402,44 +387,31 @@
                 <div class="home-feature-text">Servicios de mezcla y fabricación de colores bajo pedido.</div>
               </div>
             </div>
-
-            <div class="home-hero-note card small muted">
-              Calidad garantizada en productos y atención personalizada. Trabajamos con marcas reconocidas y control de
-              calidad en todas las mezclas.
-            </div>
+            <div class="home-hero-note card small muted"> Calidad garantizada en productos y atención personalizada.
+              Trabajamos con marcas reconocidas y control de calidad en todas las mezclas. </div>
           </div>
         </div>
-
         <aside class="home-hero-aside">
           <div class="home-stack">
             <div class="card">
               <h3 style="margin:0 0 8px 0">Nuestros compromisos</h3>
-              <p class="small muted" style="margin:0">
-                Calidad garantizada en productos y atención personalizada. Trabajamos con marcas reconocidas y control
-                de calidad en todas las mezclas.
-              </p>
+              <p class="small muted" style="margin:0"> Calidad garantizada en productos y atención personalizada.
+                Trabajamos con marcas reconocidas y control de calidad en todas las mezclas. </p>
             </div>
-
             <div class="card">
               <h3 style="margin:0 0 8px 0">Calidad y control</h3>
-              <p class="small muted" style="margin:0">
-                Todos los tonos pasan por controles de precisión para asegurar consistencia y desempeño en obra.
-              </p>
+              <p class="small muted" style="margin:0"> Todos los tonos pasan por controles de precisión para asegurar
+                consistencia y desempeño en obra. </p>
             </div>
-
             <div class="card">
               <h3 style="margin:0 0 8px 0">Atención personalizada</h3>
-              <p class="small muted" style="margin:0">
-                Asesoría técnica y estética para cada proyecto: te ayudamos a elegir el mejor producto según superficie
-                y uso.
-              </p>
+              <p class="small muted" style="margin:0"> Asesoría técnica y estética para cada proyecto: te ayudamos a
+                elegir el mejor producto según superficie y uso. </p>
             </div>
           </div>
         </aside>
       </div>
-    </section>
-
-    <!-- Servicios (sin cambios) -->
+    </section> <!-- Servicios (sin cambios) -->
     <section class="container section">
       <h2>Servicios</h2>
       <div class="services-grid" style="margin-top:12px">
@@ -450,7 +422,6 @@
             <p class="small muted">Recomendaciones técnicas y estéticas para tu espacio.</p>
           </div>
         </div>
-
         <div class="card service">
           <div class="icon">🧰</div>
           <div>
@@ -458,7 +429,6 @@
             <p class="small muted">Fabricación de colores exactos en el momento.</p>
           </div>
         </div>
-
         <div class="card service">
           <div class="icon">📄</div>
           <div>
@@ -468,13 +438,10 @@
         </div>
       </div>
     </section>
-  </main>
-
-  <!-- FOOTER (mejorado) -->
+  </main> <!-- FOOTER (mejorado) -->
   <footer class="site-footer" role="contentinfo">
     <div class="site-footer__inner container">
-      <div class="footer-col about">
-        <a href="index.html" class="brand-link"><strong>República Colores</strong></a>
+      <div class="footer-col about"> <a href="index.html" class="brand-link"><strong>República Colores</strong></a>
         <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 20 años.</p>
       </div>
       <div class="footer-col links">
@@ -493,9 +460,7 @@
       </div>
       <div class="footer-col social">
         <h4>Síguenos</h4>
-        <div class="social-icons">
-          <a href="#" aria-label="Facebook">👍</a>
-          <a href="#" aria-label="Instagram">📸</a>
+        <div class="social-icons"> <a href="#" aria-label="Facebook">👍</a> <a href="#" aria-label="Instagram">📸</a>
         </div>
       </div>
     </div>
@@ -503,28 +468,7 @@
       <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
     </div>
   </footer>
-
-  <script>
-    function toggleSiteMenu() {
-      const menu = document.getElementById('site-menu');
-      const btn = document.querySelector('.site-menu-toggle');
-      if (!menu) return;
-      const isHidden = menu.hasAttribute('hidden');
-      if (isHidden) {
-        menu.removeAttribute('hidden');
-        btn.setAttribute('aria-expanded', 'true');
-      } else {
-        menu.setAttribute('hidden', '');
-        btn.setAttribute('aria-expanded', 'false');
-      }
-    }
-    function doSearchIndex() {
-      var q = document.getElementById('globalSearch') ? document.getElementById('globalSearch').value.trim() : (document.getElementById('indexSearch') ? document.getElementById('indexSearch').value.trim() : '');
-      if (!q) return location.href = 'productos.html';
-      location.href = 'productos.html?q=' + encodeURIComponent(q);
-    }
-    document.addEventListener('DOMContentLoaded', function () { var el = document.getElementById('footerYear'); if (el) el.textContent = new Date().getFullYear(); });
-  </script>
+  
 </body>
 
 </html>

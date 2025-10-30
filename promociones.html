@@ -247,7 +247,7 @@
   <header class="site-header" role="banner">
     <div class="site-header__inner container">
       <div class="site-brand">
-        <a href="index.html" class="brand-link" aria-label="Ir al inicio"><strong>República Colores</strong></a>
+        <a href="index.html" class="brand-link">República Colores</a>
       </div>
 
       <nav class="site-nav" role="navigation" aria-label="Navegación principal">
@@ -255,16 +255,19 @@
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html" aria-current="page">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </nav>
 
       <div class="site-tools">
-        <form class="site-search" role="search" onsubmit="event.preventDefault(); doSearchPromo();">
-          <input id="promSearch" class="site-search__input" type="search" placeholder="Buscar promo"
-            aria-label="Buscar promo">
-          <button type="button" class="site-search__btn" onclick="doSearchPromo()">Buscar</button>
+        <form class="site-search" role="search" onsubmit="event.preventDefault(); applyHeaderSearch();">
+          <input id="globalSearch" class="site-search__input" type="search"
+            placeholder="Buscar producto, marca o código" aria-label="Buscar">
+          <button type="button" class="site-search__btn" onclick="applyHeaderSearch()">Buscar</button>
         </form>
-        <button class="site-cart" aria-label="Ver carrito" onclick="alert('Carrito demo')">🛒</button>
+
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+
         <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()"
           aria-expanded="false">☰</button>
       </div>
@@ -276,6 +279,7 @@
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
         </ul>
       </div>
     </div>
