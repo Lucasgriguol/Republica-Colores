@@ -1660,3 +1660,27 @@ p.small {
 .danger {
   color: #b91c1c;
 }
+
+/* Responsive menu enhancements */
+@media (max-width: 900px) {
+  #site-menu {
+    transition: all 0.25s ease-in-out;
+  }
+}
+
+/* --- Ocultar menú central en modo móvil (solo mostrar marca y botones) --- */
+@media (max-width: 900px) {
+  .site-nav {
+    display: none;
+  }
+
+  .site-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-brand {
+    flex: 1;
+  }
+}

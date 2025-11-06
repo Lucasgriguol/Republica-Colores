@@ -10,6 +10,7 @@
 
 <body>
     <!-- NAVBAR -->
+    <!-- NAVBAR -->
     <header class="site-header" role="banner">
         <div class="site-header__inner container">
             <div class="site-brand">
@@ -17,23 +18,38 @@
             </div>
 
             <nav class="site-nav" role="navigation" aria-label="Navegación principal">
-                <div>
-                    <ul class="site-nav__list">
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="productos.html">Productos</a></li>
-                        <li><a href="promociones.html">Promociones</a></li>
-                        <li><a href="reservas.html" aria-current="page">Reservas</a></li>
-                    </ul>
-                </div>
+                <ul class="site-nav__list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html" aria-current="page">Reservas</a></li>
+                </ul>
             </nav>
 
             <div class="site-tools">
                 <form class="site-search" role="search" onsubmit="event.preventDefault(); applyHeaderSearch();">
                     <button id="adminBtn" class="site-admin-btn" title="Admin" aria-label="Admin">🔒</button>
                 </form>
+
+                <!-- Botón de menú hamburguesa -->
+                <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+                    onclick="toggleSiteMenu()">☰</button>
+            </div>
+        </div>
+
+        <!-- Menú desplegable mobile -->
+        <div class="site-menu" hidden id="site-menu">
+            <div class="container">
+                <ul class="site-menu__list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
+                </ul>
             </div>
         </div>
     </header>
+
 
     <!-- MAIN RESERVAS -->
     <main class="container reserva-page">
@@ -575,6 +591,33 @@
             decodePin,
             verifyPinInput
         };
+    </script>
+
+    <script>
+        function toggleSiteMenu() {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen) {
+                menu.setAttribute('hidden', '');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.textContent = '☰';
+            } else {
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.textContent = '✖️';
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            if (!menu || !btn) return;
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+                toggleSiteMenu();
+            }
+        });
     </script>
 </body>
 

@@ -257,6 +257,34 @@
   </script>
   <!-- small inline script to set year for footer if not set by module (fallback) -->
   <script>if (!document.getElementById('footerYear')) { /* nothing */ } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }</script>
+
+  <script>
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen) {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = '☰';
+      } else {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = '✖️';
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu || !btn) return;
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+        toggleSiteMenu();
+      }
+    });
+  </script>
+
 </body>
 
 </html>
