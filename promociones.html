@@ -1,103 +1,104 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Pinturería — Promociones</title>
-<!-- global CSS -->
-<link href="styles.css" rel="stylesheet"/>
-<!-- Scoped navbar/footer styles -->
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Pinturería — Promociones</title>
+  <!-- global CSS -->
+  <link href="styles.css" rel="stylesheet" />
+  <!-- Scoped navbar/footer styles -->
 
 </head>
+
 <body>
-<!-- NAVBAR (mejorado) -->
-<header class="site-header" role="banner">
-<div class="site-header__inner container">
-<div class="site-brand">
-<a class="brand-link" href="index.html">República Colores</a>
-</div>
-<nav aria-label="Navegación principal" class="site-nav" role="navigation">
-<ul class="site-nav__list">
-<li><a href="index.html">Inicio</a></li>
-<li><a href="productos.html">Productos</a></li>
-<li><a aria-current="page" href="promociones.html">Promociones</a></li>
-<li><a href="reservas.html">Reservas</a></li>
-</ul>
-</nav>
-<div class="site-tools">
-<form class="site-search" onsubmit="event.preventDefault(); applyHeaderSearch();" role="search">
-<input aria-label="Buscar" class="site-search__input" id="globalSearch" placeholder="Buscar producto, marca o código" type="search"/>
-<button class="site-search__btn" onclick="applyHeaderSearch()" type="button">Buscar</button>
-</form>
-<button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
-<button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle" onclick="toggleSiteMenu()">☰</button>
-</div>
-</div>
-<div class="site-menu" hidden="" id="site-menu">
-<div class="container">
-<ul class="site-menu__list">
-<li><a href="index.html">Inicio</a></li>
-<li><a href="productos.html">Productos</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="reservas.html">Reservas</a></li>
-</ul>
-</div>
-</div>
-</header>
-<!-- MAIN PROMOS -->
-<main class="container promos-page" id="promosMain">
-<h1>Promociones</h1>
-<p class="small">Promoción vigente: 3 cuotas sin interés con todas las tarjetas.</p>
-<section aria-live="polite" class="promos-grid" id="promosSection">
-<div class="loading-center">Cargando promociones…</div>
-</section>
-</main>
-<!-- FOOTER (mejorado) -->
-<footer class="site-footer" role="contentinfo">
-<div class="site-footer__inner container">
-<div class="footer-col about">
-<a class="brand-link" href="index.html"><strong>República Colores</strong></a>
-<p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 20 años.</p>
-</div>
-<div class="footer-col links">
-<h4>Enlaces</h4>
-<ul>
-<li><a href="productos.html">Productos</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="index.html">Inicio</a></li>
-</ul>
-</div>
-<div class="footer-col contact">
-<h4>Contacto</h4>
-<p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
-<p class="small muted">Tel: +54 351 618 5138</p>
-<p class="small muted">Email: <a href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
-</div>
-<div class="footer-col social">
-<h4>Síguenos</h4>
-<div class="social-icons">
-<a aria-label="Facebook" href="#">👍</a>
-<a aria-label="Instagram" href="#">📸</a>
-</div>
-</div>
-</div>
-<div class="site-footer__bottom container">
-<div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
-</div>
-</footer>
-<!-- Modal (condiciones) -->
-<div id="promoModalBack" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:220">
-<div id="promoModal" style="background:#fff;padding:20px;border-radius:10px;max-width:760px;width:94%;">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<strong id="modalTitle">Condiciones</strong>
-<button id="modalClose" style="background:#f3f6fb;border:1px solid #e6eef8;padding:8px;border-radius:8px;cursor:pointer">Cerrar</button>
-</div>
-<div id="modalBody" style="margin-top:12px;color:var(--muted);line-height:1.45"></div>
-</div>
-</div>
-<!-- Firebase + logic (mostramos primero las promos del code original) -->
-<script type="module">
+  <!-- NAVBAR (mejorado) -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <div class="site-brand">
+        <a class="brand-link" href="index.html">República Colores</a>
+      </div>
+      <nav aria-label="Navegación principal" class="site-nav" role="navigation">
+        <ul class="site-nav__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a aria-current="page" href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </nav>
+      <div class="site-tools">
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+        <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+          onclick="toggleSiteMenu()">☰</button>
+      </div>
+    </div>
+    <div class="site-menu" hidden="" id="site-menu">
+      <div class="container">
+        <ul class="site-menu__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- MAIN PROMOS -->
+  <main class="container promos-page" id="promosMain">
+    <h1>Promociones</h1>
+    <p class="small">Promoción vigente: 3 cuotas sin interés con todas las tarjetas.</p>
+    <section aria-live="polite" class="promos-grid" id="promosSection">
+      <div class="loading-center">Cargando promociones…</div>
+    </section>
+  </main>
+  <!-- FOOTER (mejorado) -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner container">
+      <div class="footer-col about">
+        <a class="brand-link" href="index.html"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 20 años.</p>
+      </div>
+      <div class="footer-col links">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="footer-col contact">
+        <h4>Contacto</h4>
+        <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+        <p class="small muted">Tel: +54 351 618 5138</p>
+        <p class="small muted">Email: <a href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
+      </div>
+      <div class="footer-col social">
+        <h4>Síguenos</h4>
+        <div class="social-icons">
+          <a aria-label="Facebook" href="#">👍</a>
+          <a aria-label="Instagram" href="#">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom container">
+      <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
+    </div>
+  </footer>
+  <!-- Modal (condiciones) -->
+  <div id="promoModalBack"
+    style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:220">
+    <div id="promoModal" style="background:#fff;padding:20px;border-radius:10px;max-width:760px;width:94%;">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong id="modalTitle">Condiciones</strong>
+        <button id="modalClose"
+          style="background:#f3f6fb;border:1px solid #e6eef8;padding:8px;border-radius:8px;cursor:pointer">Cerrar</button>
+      </div>
+      <div id="modalBody" style="margin-top:12px;color:var(--muted);line-height:1.45"></div>
+    </div>
+  </div>
+  <!-- Firebase + logic (mostramos primero las promos del code original) -->
+  <script type="module">
     // Firebase v9 modular (se deja en caso de que haya promos en Firestore)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -254,7 +255,8 @@
     // expose doSearchPromo to global (for inline onclicks / tests)
     if (window) window.doSearchPromo = doSearchPromo;
   </script>
-<!-- small inline script to set year for footer if not set by module (fallback) -->
-<script>if (!document.getElementById('footerYear')) { /* nothing */ } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }</script>
+  <!-- small inline script to set year for footer if not set by module (fallback) -->
+  <script>if (!document.getElementById('footerYear')) { /* nothing */ } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }</script>
 </body>
+
 </html>

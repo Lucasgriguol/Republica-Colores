@@ -1,128 +1,130 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Pinturería — Detalle de producto</title>
-<link href="styles.css" rel="stylesheet"/>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Pinturería — Detalle de producto</title>
+  <link href="styles.css" rel="stylesheet" />
 
 </head>
+
 <body>
-<header class="site-header" role="banner">
-<div class="site-header__inner container">
-<div class="site-brand">
-<a class="brand-link" href="index.html">República Colores</a>
-</div>
-<nav aria-label="Navegación principal" class="site-nav" role="navigation">
-<ul class="site-nav__list">
-<li><a aria-current="page" href="index.html">Inicio</a></li>
-<li><a href="productos.html">Productos</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="reservas.html">Reservas</a></li>
-</ul>
-</nav>
-<div class="site-tools">
-<form class="site-search" onsubmit="event.preventDefault(); applyHeaderSearch();" role="search">
-<input aria-label="Buscar" class="site-search__input" id="globalSearch" placeholder="Buscar producto, marca o código" type="search"/>
-<button class="site-search__btn" onclick="applyHeaderSearch()" type="button">Buscar</button>
-</form>
-<button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
-<button aria-label="Admin" class="site-admin-btn" id="adminBtn" title="Admin">🔒</button>
-<button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle" onclick="toggleSiteMenu()">☰</button>
-</div>
-</div>
-<div class="site-menu" hidden="" id="site-menu">
-<div class="container">
-<ul class="site-menu__list">
-<li><a href="index.html">Inicio</a></li>
-<li><a href="productos.html">Productos</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="reservas.html">Reservas</a></li>
-</ul>
-</div>
-</div>
-</header>
-<main class="container product-page">
-<div class="loading-center" id="productLoader">Cargando producto…</div>
-<div class="product-grid" id="productGrid" style="display:none">
-<div class="product-media"><img alt="Producto" id="productImage" src="https://via.placeholder.com/800x600?text=Producto"/></div>
-<div class="product-info">
-<h1 id="productTitle">Producto de ejemplo</h1>
-<div class="product-price" id="productPrice">$ 1.200</div>
-<div class="product-meta" id="productMeta">Marca: Demo · Presentación: 1 L</div>
-<div class="product-actions">
-<button class="btn btn-ghost btn-wide" onclick="window.location.href='productos.html'">Volver al
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <div class="site-brand">
+        <a class="brand-link" href="index.html">República Colores</a>
+      </div>
+      <nav aria-label="Navegación principal" class="site-nav" role="navigation">
+        <ul class="site-nav__list">
+          <li><a aria-current="page" href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </nav>
+      <div class="site-tools">
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+        <button aria-label="Admin" class="site-admin-btn" id="adminBtn" title="Admin">🔒</button>
+        <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+          onclick="toggleSiteMenu()">☰</button>
+      </div>
+    </div>
+    <div class="site-menu" hidden="" id="site-menu">
+      <div class="container">
+        <ul class="site-menu__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main class="container product-page">
+    <div class="loading-center" id="productLoader">Cargando producto…</div>
+    <div class="product-grid" id="productGrid" style="display:none">
+      <div class="product-media"><img alt="Producto" id="productImage"
+          src="https://via.placeholder.com/800x600?text=Producto" /></div>
+      <div class="product-info">
+        <h1 id="productTitle">Producto de ejemplo</h1>
+        <div class="product-price" id="productPrice">$ 1.200</div>
+        <div class="product-meta" id="productMeta">Marca: Demo · Presentación: 1 L</div>
+        <div class="product-actions">
+          <button class="btn btn-ghost btn-wide" onclick="window.location.href='productos.html'">Volver al
             listado</button>
-<button class="btn btn" id="reserveBtn">Reservar</button>
-</div>
-<div class="product-desc" id="productDesc">
-<h3>Descripción</h3>
-<p class="small muted">Descripción de ejemplo.</p>
-<h4 style="margin-top:12px">Ficha técnica</h4>
-<ul class="small muted" id="productSpecs">
-<li>Rendimiento: ~10 m² / litro</li>
-</ul>
-</div>
-</div>
-</div>
-</main>
-<div aria-hidden="true" aria-modal="true" class="admin-modal-back" id="adminModalBack" role="dialog">
-<div class="admin-modal">
-<div style="display:flex;justify-content:space-between;align-items:center;">
-<div>
-<h2 style="margin:0">Área admin — Reservas</h2>
-<div class="small muted">Solo para administradores.</div>
-</div>
-<div><button class="btn btn-ghost" id="adminCloseTop">Cerrar</button></div>
-</div>
-<div id="adminLoginBlock" style="margin-top:14px">
-<div style="display:flex;gap:10px;align-items:center">
-<input id="adminPinInput" placeholder="Ingresá PIN" style="padding:10px;border-radius:8px;border:1px solid #eef6fb">
-<button class="btn btn-primary" id="adminLoginBtn">Entrar</button>
-<div class="small muted" id="adminLoginMsg" style="margin-left:12px"></div>
-</input></div>
-</div>
-<div id="adminContent" style="display:none;margin-top:16px">
-<div class="admin-actions">
-<button class="btn" id="adminSignout">Cerrar sesión admin</button>
-<button class="btn btn-primary" id="refreshReservations">Actualizar</button>
-</div>
-<div class="admin-panel" id="adminPanel" style="margin-top:12px">
-<div class="small muted">Cargando reservas…</div>
-</div>
-</div>
-</div>
-</div>
-<footer class="site-footer" role="contentinfo">
-<div class="site-footer__inner container">
-<div class="footer-col about"><a class="brand-link" href="index.html"><strong>República Colores</strong></a>
-<p class="small muted">Soluciones en pinturas y terminaciones.</p>
-</div>
-<div class="footer-col links">
-<h4>Enlaces</h4>
-<ul>
-<li><a href="productos.html">Productos</a></li>
-<li><a href="promociones.html">Promociones</a></li>
-<li><a href="reservas.html">Reservas</a></li>
-</ul>
-</div>
-<div class="footer-col contact">
-<h4>Contacto</h4>
-<p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
-<p class="small muted">Tel: +54 351 618 5138</p>
-</div>
-<div class="footer-col social">
-<h4>Síguenos</h4>
-<div class="social-icons"><a aria-label="Facebook" href="#">👍</a><a aria-label="Instagram" href="#">📸</a>
-</div>
-</div>
-</div>
-<div class="site-footer__bottom container">
-<div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
-</div>
-</footer>
-<script type="module">
+          <button class="btn btn" id="reserveBtn">Reservar</button>
+        </div>
+        <div class="product-desc" id="productDesc">
+          <h3>Descripción</h3>
+          <p class="small muted">Descripción de ejemplo.</p>
+          <h4 style="margin-top:12px">Ficha técnica</h4>
+          <ul class="small muted" id="productSpecs">
+            <li>Rendimiento: ~10 m² / litro</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div aria-hidden="true" aria-modal="true" class="admin-modal-back" id="adminModalBack" role="dialog">
+    <div class="admin-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h2 style="margin:0">Área admin — Reservas</h2>
+          <div class="small muted">Solo para administradores.</div>
+        </div>
+        <div><button class="btn btn-ghost" id="adminCloseTop">Cerrar</button></div>
+      </div>
+      <div id="adminLoginBlock" style="margin-top:14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <input id="adminPinInput" placeholder="Ingresá PIN"
+            style="padding:10px;border-radius:8px;border:1px solid #eef6fb">
+          <button class="btn btn-primary" id="adminLoginBtn">Entrar</button>
+          <div class="small muted" id="adminLoginMsg" style="margin-left:12px"></div>
+          </input>
+        </div>
+      </div>
+      <div id="adminContent" style="display:none;margin-top:16px">
+        <div class="admin-actions">
+          <button class="btn" id="adminSignout">Cerrar sesión admin</button>
+          <button class="btn btn-primary" id="refreshReservations">Actualizar</button>
+        </div>
+        <div class="admin-panel" id="adminPanel" style="margin-top:12px">
+          <div class="small muted">Cargando reservas…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner container">
+      <div class="footer-col about"><a class="brand-link" href="index.html"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones.</p>
+      </div>
+      <div class="footer-col links">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col contact">
+        <h4>Contacto</h4>
+        <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+        <p class="small muted">Tel: +54 351 618 5138</p>
+      </div>
+      <div class="footer-col social">
+        <h4>Síguenos</h4>
+        <div class="social-icons"><a aria-label="Facebook" href="#">👍</a><a aria-label="Instagram" href="#">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom container">
+      <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
+    </div>
+  </footer>
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
@@ -304,4 +306,5 @@
     }
   </script>
 </body>
+
 </html>

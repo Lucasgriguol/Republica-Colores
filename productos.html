@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -28,12 +29,9 @@
       </nav>
 
       <div class="site-tools">
-        <form class="site-search" role="search" onsubmit="event.preventDefault(); doSearchIndex();">
-          <input id="globalSearch" class="site-search__input" type="search" placeholder="Buscar producto, marca o código" aria-label="Buscar">
-          <button type="button" class="site-search__btn" onclick="doSearchIndex()">Buscar</button>
-        </form>
         <button class="site-reserve" aria-label="Reservas" onclick="location.href='reservas.html'">Reservas</button>
-        <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()" aria-expanded="false">☰</button>
+        <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()"
+          aria-expanded="false">☰</button>
       </div>
     </div>
 
@@ -52,7 +50,8 @@
   <!-- CONTENIDO: Productos -->
   <main class="container products-page">
     <h1>Productos</h1>
-    <p class="small muted">Listado de productos. Filtra por categoría o buscá por nombre (búsqueda en vivo mientras escribís).</p>
+    <p class="small muted">Listado de productos. Filtra por categoría o buscá por nombre (búsqueda en vivo mientras
+      escribís).</p>
 
     <!-- Filters -->
     <div class="filters-row">
@@ -243,7 +242,7 @@
             // guardamos producto en localStorage (rc_cart) usando la misma estructura que usa reservas.html
             const storedRaw = localStorage.getItem('rc_cart');
             let cart = [];
-            try { cart = storedRaw ? JSON.parse(storedRaw) : []; } catch(e){ cart = []; }
+            try { cart = storedRaw ? JSON.parse(storedRaw) : []; } catch (e) { cart = []; }
             const existing = cart.find(c => c.id === p.id);
             if (existing) {
               existing.qty = (existing.qty || 1) + 1;
@@ -257,7 +256,7 @@
                 _collection: p._collection || null
               });
             }
-            try { localStorage.setItem('rc_cart', JSON.stringify(cart)); } catch(e){ console.warn('storage err', e); }
+            try { localStorage.setItem('rc_cart', JSON.stringify(cart)); } catch (e) { console.warn('storage err', e); }
           } catch (e) { console.warn('err add to cart', e); }
           // redirigimos a reservas
           window.location.href = 'reservas.html';
@@ -292,10 +291,11 @@
 
     filterName.addEventListener('input', applyFilters);
     filterCategory.addEventListener('change', applyFilters);
-    clearFilters.addEventListener('click', () => { filterName.value=''; filterCategory.value=''; applyFilters(); });
+    clearFilters.addEventListener('click', () => { filterName.value = ''; filterCategory.value = ''; applyFilters(); });
 
     // inicial
     loadProducts();
   </script>
 </body>
+
 </html>
