@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pinturería — Reservas / Presupuesto</title>
+    <link href="styles.css" rel="stylesheet" />
+    <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+
+</head>
+
+<body>
+    <header class="site-header" role="banner">
+        <div class="site-header__inner container">
+            <div class="site-brand">
+                <a class="brand-link" href="index.html">República Colores</a>
+            </div>
+
+            <nav class="site-nav" role="navigation" aria-label="Navegación principal">
+                <ul class="site-nav__list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html" aria-current="page">Reservas</a></li>
+                </ul>
+            </nav>
+
+            <div class="site-tools">
+                <form class="site-search" role="search" onsubmit="event.preventDefault(); applyHeaderSearch();">
+                    <button id="adminBtn" class="site-admin-btn" title="Admin" aria-label="Admin">🔒</button>
+                </form>
+
+                <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+                    onclick="toggleSiteMenu()">☰</button>
+            </div>
+        </div>
+
+        <div class="site-menu" hidden id="site-menu">
+            <div class="container">
+                <ul class="site-menu__list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container reserva-page">
+        <h1>Reservas / Presupuesto</h1>
+        <p class="small muted">Agregá productos (por ID) o pegá el ID desde la ficha de producto. Completá nombre y DNI
+            para reservar o generar un presupuesto.</p>
+
+        <div class="reserva-grid">
+            <section class="card">
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <input id="addProductId" placeholder="Ej: 123, 456, 789"
+                        style="flex:1;padding:10px;border-radius:8px;border:1px solid #eef6fb">
+                    <button id="btnAdd" class="btn btn-primary">Agregar</button>
+                </div>
+
+                <div class="cart-list" id="cartList" aria-live="polite" style="margin-top:12px">
+                    <div class="empty-msg">No hay productos en la reserva. Agregá el ID de un producto para comenzar.
+                    </div>
+                </div>
+
+                <div style="margin-top:12px; display:flex; gap:8px; justify-content:space-between; align-items:center;">
+                    <div class="note-small">Los precios se toman desde el inventario (Firestore).</div>
+                    <button id="clearCart" class="btn">Vaciar</button>
+                </div>
+            </section>
+
+            <aside>
+                <div class="card">
+                    <h3>Datos para la reserva</h3>
+                    <div class="form-row">
+                        <label for="resName">Nombre completo</label>
+                        <input id="resName" placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="form-row">
+                        <label for="resDni">DNI</label>
+                        <input id="resDni" placeholder="Ej: 20123456">
+                    </div>
+
+                    <div class="card" style="margin-top:10px">
+                        <h4>Resumen</h4>
+                        <div id="summaryRows" style="margin-top:8px"></div>
+                        <div class="total" id="totalAmount">$ 0</div>
+                        <div class="actions-row">
+                            <button id="btnReserve" id="btnDownload" class="btn btn-primary">Reservar (Primero descargue
+                                el resumen)</button>
+                            <button id="btnDownload" class="btn btn-ghost">Descargar resumen</button>
+                        </div>
+                        <div id="resultMessage" style="margin-top:10px"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <div id="adminModalBack" class="admin-modal-back" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="admin-modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <h2 style="margin:0">Área admin — Reservas</h2>
+                    <div class="small muted">Solo para administradores</div>
+                </div>
+                <div><button id="adminCloseTop" class="btn btn-ghost">Cerrar</button></div>
+            </div>
+
+            <div id="adminLoginBlock" style="margin-top:14px">
+                <div style="display:flex;gap:10px;align-items:center">
+                    <input id="adminPinInput" placeholder="Ingresá PIN"
+                        style="padding:10px;border-radius:8px;border:1px solid #eef6fb" />
+                    <button id="adminLoginBtn" class="btn btn-primary">Entrar</button>
+                    <div class="small muted" id="adminLoginMsg" style="margin-left:12px"></div>
+                </div>
+            </div>
+
+            <div id="adminContent" style="display:none;margin-top:16px">
+                <div style="display:flex;gap:8px;align-items:center">
+                    <button id="adminSignout" class="btn">Cerrar sesión admin</button>
+                    <button id="refreshReservations" class="btn btn-primary">Actualizar</button>
+                    <button id="deleteAllReservations" class="btn danger">Vaciar todo</button>
+                </div>
+                <div class="admin-panel" id="adminPanel" style="margin-top:12px">
+                    <div class="small muted">Cargando reservas…</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="site-footer__inner container">
+            <div class="footer-col about"><a href="index.html" class="brand-link"><strong>República Colores</strong></a>
+                <p class="small muted">Soluciones en pinturas y terminaciones.</p>
+            </div>
+            <div class="footer-col links">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contact">
+                <h4>Contacto</h4>
+                <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+                <p class="small muted">Tel: +54 351 618 5138</p>
+            </div>
+            <div class="footer-col social">
+                <h4>Síguenos</h4>
+                <div class="social-icons"><a href="#" aria-label="Facebook">👍</a><a href="#"
+                        aria-label="Instagram">📸</a></div>
+            </div>
+        </div>
+        <div class="site-footer__bottom container">
+            <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import {
+            getFirestore, collection, getDocs, addDoc, serverTimestamp, doc, getDoc, deleteDoc
+        } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPVbxfvJO-w-j6lGL-TEFeHNJRV7G1UTo",
+            authDomain: "inventario-b8fc2.firebaseapp.com",
+            projectId: "inventario-b8fc2",
+            storageBucket: "inventario-b8fc2.firebasestorage.app",
+            messagingSenderId: "184222469977",
+            appId: "1:184222469977:web:83cc7bcc7116eb43494648"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const COLLECTIONS = ['productos', 'products', 'items', 'inventario', 'productosListado'];
+
+        const addInput = document.getElementById('addProductId');
+        const btnAdd = document.getElementById('btnAdd');
+        const cartList = document.getElementById('cartList');
+        const clearCartBtn = document.getElementById('clearCart');
+        const summaryRows = document.getElementById('summaryRows');
+        const totalAmount = document.getElementById('totalAmount');
+        const btnReserve = document.getElementById('btnReserve');
+        const btnDownload = document.getElementById('btnDownload');
+        const resultMessage = document.getElementById('resultMessage');
+        const nameInput = document.getElementById('resName');
+        const dniInput = document.getElementById('resDni');
+        const adminBtn = document.getElementById('adminBtn');
+        const adminModalBack = document.getElementById('adminModalBack');
+        const adminCloseTop = document.getElementById('adminCloseTop');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminPinInput = document.getElementById('adminPinInput');
+        const adminLoginMsg = document.getElementById('adminLoginMsg');
+        const adminLoginBlock = document.getElementById('adminLoginBlock');
+        const adminContent = document.getElementById('adminContent');
+        const adminPanel = document.getElementById('adminPanel');
+        const adminSignout = document.getElementById('adminSignout');
+        const refreshReservations = document.getElementById('refreshReservations');
+        const deleteAllReservations = document.getElementById('deleteAllReservations');
+        let CART = [];
+
+        function loadCartFromStorage() {
+            try {
+                const raw = localStorage.getItem('rc_cart');
+                if (!raw) return [];
+                const arr = JSON.parse(raw);
+                if (Array.isArray(arr)) return arr;
+            } catch (e) { console.warn('loadCart err', e); }
+            return [];
+        }
+        function saveCartToStorage() {
+            try { localStorage.setItem('rc_cart', JSON.stringify(CART)); } catch (e) { console.warn('saveCart err', e); }
+        }
+
+        const PIN_OFFSET = 11;
+        const encodedPin = [60, 68, 65, 64];
+        function decodePin() { return encodedPin.map(c => String.fromCharCode(c - PIN_OFFSET)).join(''); }
+        function verifyPinInput(value) { return String(value || '').trim() === decodePin(); }
+
+        function formatPrice(v) {
+            if (v == null || v === '') return 'Consultar';
+            const n = Number(v);
+            if (isNaN(n)) return 'Consultar';
+            return '$' + n.toLocaleString('es-AR');
+        }
+
+        function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
+        async function findProductById(id) {
+            id = String(id || '').trim();
+            if (!id) return null;
+            for (const name of COLLECTIONS) {
+                try {
+                    const docRef = doc(db, name, id);
+                    const snap = await getDoc(docRef);
+                    if (snap && snap.exists()) return { id: snap.id, ...snap.data(), _collection: name };
+                } catch (e) { console.warn('err finding in', name, e); }
+            }
+            for (const name of COLLECTIONS) {
+                try {
+                    const colRef = collection(db, name);
+                    const snap = await getDocs(colRef);
+                    if (!snap.empty) {
+                        for (const d of snap.docs) {
+                            const data = d.data();
+                            if (data.slug === id || d.id === id || (data.code && data.code === id)) {
+                                return { id: d.id, ...data, _collection: name };
+                            }
+                        }
+                    }
+                } catch (e) { console.warn('err scanning', name, e); }
+            }
+            return null;
+        }
+
+        async function addProductById(id) {
+            if (!id) return;
+            resultMessage.textContent = '';
+            id = String(id).trim();
+            const existing = CART.find(c => c.id === id);
+            if (existing) {
+                existing.qty = (existing.qty || 1) + 1;
+                renderCart();
+                saveCartToStorage();
+                return;
+            }
+            const p = await findProductById(id);
+            if (p) {
+                const item = {
+                    id: p.id,
+                    name: p.name || p.nombre || p.title || ('Producto ' + p.id),
+                    price: p.price || p.precio || p.valor || p.cost || null,
+                    qty: 1,
+                    image: (p.image || p.img || p.foto || (p.images && p.images[0]) || null),
+                    _collection: p._collection || null
+                };
+                CART.push(item);
+            } else {
+                CART.push({ id, name: 'Producto: ' + id, price: null, image: null, qty: 1, _collection: null });
+            }
+            renderCart();
+            saveCartToStorage();
+        }
+
+        function renderCart() {
+            cartList.innerHTML = '';
+            if (!CART || CART.length === 0) {
+                cartList.innerHTML = '<div class="empty-msg">No hay productos en la reserva. Agregá el ID de un producto para comenzar.</div>';
+                summaryRows.innerHTML = '';
+                totalAmount.textContent = '$ 0';
+                return;
+            }
+            CART.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                const imageUrl = item.image || 'https://via.placeholder.com/400x300?text=Sin+imagen';
+                div.innerHTML = `
+          <div class="thumb"><img src="${imageUrl}" alt="${escapeHtml(item.name)}"></div>
+          <div class="meta">
+            <h4>${escapeHtml(item.name)}</h4>
+            <div class="price">${formatPrice(item.price)}</div>
+            <div class="note-small">ID: ${escapeHtml(item.id)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div class="qty-controls">
+              <button data-action="dec" data-idx="${idx}">−</button>
+              <div style="min-width:28px;text-align:center">${item.qty}</div>
+              <button data-action="inc" data-idx="${idx}">+</button>
+            </div>
+            <button data-action="remove" data-idx="${idx}" class="btn" style="font-size:12px;padding:6px 8px">Eliminar</button>
+          </div>
+        `;
+                cartList.appendChild(div);
+
+                div.querySelectorAll('button[data-action]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = btn.getAttribute('data-action');
+                        const i = Number(btn.getAttribute('data-idx'));
+                        if (action === 'inc') {
+                            CART[i].qty = (CART[i].qty || 1) + 1;
+                        } else if (action === 'dec') {
+                            CART[i].qty = Math.max(1, (CART[i].qty || 1) - 1);
+                        } else if (action === 'remove') {
+                            CART.splice(i, 1);
+                        }
+                        renderCart();
+                        saveCartToStorage();
+                    });
+                });
+            });
+
+            summaryRows.innerHTML = '';
+            let total = 0;
+            CART.forEach(it => {
+                const row = document.createElement('div');
+                row.className = 'summary-row';
+                row.innerHTML = `<div>${escapeHtml(it.name)} x${it.qty}</div><div>${formatPrice((it.price || 0) * it.qty)}</div>`;
+                summaryRows.appendChild(row);
+                total += (Number(it.price) || 0) * it.qty;
+            });
+            totalAmount.textContent = '$ ' + total.toLocaleString('es-AR');
+        }
+
+        function clearCart() {
+            CART = [];
+            renderCart();
+            saveCartToStorage();
+            resultMessage.textContent = 'Carrito vaciado.';
+        }
+
+        async function submitReservation() {
+            resultMessage.textContent = '';
+            const name = (nameInput.value || '').trim();
+            const dni = (dniInput.value || '').trim();
+            if (!name) { resultMessage.innerHTML = '<span class="danger">Ingresá un nombre</span>'; return; }
+            if (!dni) { resultMessage.innerHTML = '<span class="danger">Ingresá un DNI</span>'; return; }
+            if (!CART || CART.length === 0) { resultMessage.innerHTML = '<span class="danger">El carrito está vacío</span>'; return; }
+
+            const payload = {
+                name, dni,
+                items: CART.map(it => ({ id: it.id, name: it.name, price: it.price, qty: it.qty, _collection: it._collection })),
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                const docRef = await addDoc(collection(db, 'reservas'), payload);
+                resultMessage.innerHTML = `<div class="small">Reserva creada: <strong>${docRef.id}</strong></div>`;
+                CART = [];
+                renderCart();
+                saveCartToStorage();
+            } catch (e) {
+                console.error(e);
+                resultMessage.innerHTML = '<span class="danger">Error al crear la reserva.</span>';
+            }
+        }
+
+        function downloadSummary() {
+            const lines = [];
+            lines.push('Reserva — República Colores');
+            lines.push('---------------------------');
+            const name = (nameInput.value || '').trim();
+            const dni = (dniInput.value || '').trim();
+            lines.push('Nombre: ' + name);
+            lines.push('DNI: ' + dni);
+            lines.push('');
+            lines.push('Items:');
+            CART.forEach(it => lines.push(`- ${it.name} (ID: ${it.id}) x${it.qty} — ${formatPrice(it.price)}`));
+            lines.push('');
+            lines.push('Total: ' + totalAmount.textContent);
+            const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'reserva.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function formatItems(items) {
+            if (!items || !items.length) return '-';
+            return '<ul style="padding-left:16px;margin:0;">' +
+                items.map(it => `<li>${escapeHtml(it.name)} x${it.qty} — ${formatPrice(it.price)}</li>`).join('') +
+                '</ul>';
+        }
+
+        async function loadReservations() {
+            adminPanel.innerHTML = '<div class="small muted">Cargando reservas…</div>';
+            try {
+                const q = collection(db, 'reservas');
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    adminPanel.innerHTML = '<div class="small muted">No hay reservas.</div>';
+                    return;
+                }
+
+                let html = `
+        <table style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr style="text-align:left; border-bottom:1px solid #ccc;">
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>DNI</th>
+                    <th>Items</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+
+                snap.forEach(d => {
+                    const data = d.data();
+                    html += `
+            <tr style="border-bottom:1px solid #eee;">
+                <td>${d.id}</td>
+                <td>${escapeHtml(data.name)}</td>
+                <td>${escapeHtml(data.dni)}</td>
+                <td>${formatItems(data.items)}</td>
+                <td>${new Date((data.createdAt && data.createdAt.toDate) ? data.createdAt.toDate() : Date.now()).toLocaleString()}</td>
+                <td><button data-id="${d.id}" class="btn btn-ghost del-res">Eliminar</button></td>
+            </tr>
+            `;
+                });
+
+                html += `</tbody></table>`;
+                adminPanel.innerHTML = html;
+
+                adminPanel.querySelectorAll('.del-res').forEach(b => {
+                    b.addEventListener('click', async () => {
+                        const id = b.getAttribute('data-id');
+                        if (!confirm('Confirmar: eliminar esta reserva?')) return;
+                        try {
+                            await deleteDoc(doc(db, 'reservas', id));
+                            loadReservations();
+                        } catch (e) {
+                            console.error(e);
+                            alert('Error al eliminar');
+                        }
+                    });
+                });
+
+            } catch (e) {
+                console.error(e);
+                adminPanel.innerHTML = '<div class="small muted">Error cargando reservas.</div>';
+            }
+        }
+
+        btnReserve.addEventListener('click', submitReservation);
+        btnDownload.addEventListener('click', downloadSummary);
+
+        btnAdd.addEventListener('click', async () => {
+            const raw = (addInput.value || "").trim();
+            if (!raw) return;
+            const ids = raw.split(",").map(x => x.trim()).filter(Boolean);
+            btnAdd.disabled = true;
+            for (const id of ids) {
+                await addProductById(id);
+            }
+            addInput.value = "";
+            btnAdd.disabled = false;
+        });
+        addInput.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); btnAdd.click(); }
+        });
+
+        clearCartBtn.addEventListener('click', () => { clearCart(); });
+
+        adminBtn.addEventListener('click', () => {
+            adminModalBack.style.display = 'flex';
+        });
+        adminCloseTop.addEventListener('click', () => {
+            adminModalBack.style.display = 'none';
+        });
+        adminLoginBtn.addEventListener('click', async () => {
+            const val = adminPinInput.value;
+            if (!verifyPinInput(val)) {
+                adminLoginMsg.textContent = 'PIN incorrecto';
+                return;
+            }
+            adminLoginMsg.textContent = '';
+            adminLoginBlock.style.display = 'none';
+            adminContent.style.display = 'block';
+            loadReservations();
+        });
+        adminSignout.addEventListener('click', () => {
+            adminLoginBlock.style.display = 'block';
+            adminContent.style.display = 'none';
+        });
+
+        deleteAllReservations.addEventListener('click', async () => {
+            if (!confirm('Confirmar: borrar TODAS las reservas?')) return;
+            try {
+                const q = collection(db, 'reservas');
+                const snap = await getDocs(q);
+                const promises = [];
+                snap.forEach(d => promises.push(deleteDoc(doc(db, 'reservas', d.id))));
+                await Promise.all(promises);
+                loadReservations();
+            } catch (e) { console.error(e); alert('Error al vaciar'); }
+        });
+
+        (function initCartFromStorageAndUrl() {
+            try {
+                const stored = loadCartFromStorage();
+                if (stored && stored.length) {
+                    CART = stored.map(s => Object.assign({ qty: (s.qty || 1) }, s));
+                    renderCart();
+                }
+            } catch (e) { console.warn('init load err', e); }
+
+            (async function handleUrlAdds() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    if (!params.has('add')) return;
+                    const raw = params.get('add') || '';
+                    if (!raw) return;
+                    const ids = raw.split(',').map(x => x.trim()).filter(Boolean);
+                    if (ids.length === 0) return;
+                    for (const id of ids) {
+                        await addProductById(id);
+                    }
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('add');
+                    window.history.replaceState({}, document.title, url.toString());
+                } catch (e) {
+                    console.warn('Error procesando parámetro add:', e);
+                }
+            })();
+        })();
+
+        window.rcReserva = {
+            CART,
+            addProductById,
+            renderCart,
+            submitReservation,
+            loadReservations,
+            decodePin,
+            verifyPinInput
+        };
+    </script>
+
+    <script>
+        function toggleSiteMenu() {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen) {
+                menu.setAttribute('hidden', '');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.textContent = '☰';
+            } else {
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.textContent = '✖️';
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            if (!menu || !btn) return;
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+                toggleSiteMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>

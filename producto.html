@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Pinturería — Detalle de producto</title>
+  <link href="styles.css" rel="stylesheet" />
+  <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+  </a>
+
+
+</head>
+
+<body>
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <div class="site-brand">
+        <a class="brand-link" href="index.html">República Colores</a>
+      </div>
+      <nav aria-label="Navegación principal" class="site-nav" role="navigation">
+        <ul class="site-nav__list">
+          <li><a aria-current="page" href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </nav>
+      <div class="site-tools">
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+        <button aria-label="Admin" class="site-admin-btn" id="adminBtn" title="Admin">🔒</button>
+        <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+          onclick="toggleSiteMenu()">☰</button>
+      </div>
+    </div>
+    <div class="site-menu" hidden="" id="site-menu">
+      <div class="container">
+        <ul class="site-menu__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main class="container product-page">
+    <div class="loading-center" id="productLoader">Cargando producto…</div>
+    <div class="product-grid" id="productGrid" style="display:none">
+      <div class="product-media"><img alt="Producto" id="productImage"
+          src="https://via.placeholder.com/800x600?text=Producto" /></div>
+      <div class="product-info">
+        <h1 id="productTitle">Producto de ejemplo</h1>
+        <div class="product-price" id="productPrice">$ 1.200</div>
+        <div class="product-meta" id="productMeta">Marca: Demo · Presentación: 1 L</div>
+        <div class="product-actions">
+          <button class="btn btn-ghost btn-wide" onclick="window.location.href='productos.html'">Volver al
+            listado</button>
+          <button class="btn btn" id="reserveBtn">Reservar</button>
+        </div>
+        <div class="product-desc" id="productDesc">
+          <h3>Descripción</h3>
+          <p class="small muted">Descripción de ejemplo.</p>
+          <h4 style="margin-top:12px">Ficha técnica</h4>
+          <ul class="small muted" id="productSpecs">
+            <li>Rendimiento: ~10 m² / litro</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div aria-hidden="true" aria-modal="true" class="admin-modal-back" id="adminModalBack" role="dialog">
+    <div class="admin-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h2 style="margin:0">Área admin — Reservas</h2>
+          <div class="small muted">Solo para administradores.</div>
+        </div>
+        <div><button class="btn btn-ghost" id="adminCloseTop">Cerrar</button></div>
+      </div>
+      <div id="adminLoginBlock" style="margin-top:14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <input id="adminPinInput" placeholder="Ingresá PIN"
+            style="padding:10px;border-radius:8px;border:1px solid #eef6fb">
+          <button class="btn btn-primary" id="adminLoginBtn">Entrar</button>
+          <div class="small muted" id="adminLoginMsg" style="margin-left:12px"></div>
+          </input>
+        </div>
+      </div>
+      <div id="adminContent" style="display:none;margin-top:16px">
+        <div class="admin-actions">
+          <button class="btn" id="adminSignout">Cerrar sesión admin</button>
+          <button class="btn btn-primary" id="refreshReservations">Actualizar</button>
+        </div>
+        <div class="admin-panel" id="adminPanel" style="margin-top:12px">
+          <div class="small muted">Cargando reservas…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner container">
+      <div class="footer-col about"><a class="brand-link" href="index.html"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones.</p>
+      </div>
+      <div class="footer-col links">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col contact">
+        <h4>Contacto</h4>
+        <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+        <p class="small muted">Tel: +54 351 618 5138</p>
+      </div>
+      <div class="footer-col social">
+        <h4>Síguenos</h4>
+        <div class="social-icons"><a aria-label="Facebook" href="#">👍</a><a aria-label="Instagram" href="#">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom container">
+      <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
+    </div>
+  </footer>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPVbxfvJO-w-j6lGL-TEFeHNJRV7G1UTo",
+      authDomain: "inventario-b8fc2.firebaseapp.com",
+      projectId: "inventario-b8fc2",
+      storageBucket: "inventario-b8fc2.firebasestorage.app",
+      messagingSenderId: "184222469977",
+      appId: "1:184222469977:web:83cc7bcc7116eb43494648"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const COLLECTIONS = ['productos', 'products', 'items', 'inventario', 'productosListado'];
+
+    const productGrid = document.getElementById('productGrid');
+    const loader = document.getElementById('productLoader');
+    const reserveBtn = document.getElementById('reserveBtn');
+
+    const adminBtn = document.getElementById('adminBtn');
+    const adminModalBack = document.getElementById('adminModalBack');
+    const adminCloseTop = document.getElementById('adminCloseTop');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminPinInput = document.getElementById('adminPinInput');
+    const adminLoginMsg = document.getElementById('adminLoginMsg');
+    const adminLoginBlock = document.getElementById('adminLoginBlock');
+    const adminContent = document.getElementById('adminContent');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminSignout = document.getElementById('adminSignout');
+    const refreshReservations = document.getElementById('refreshReservations');
+
+    const PIN_OFFSET = 11;
+    const encodedPin = [60, 68, 65, 64];
+    function decodePin() { return encodedPin.map(c => String.fromCharCode(c - PIN_OFFSET)).join(''); }
+    function verifyPinInput(value) { return String(value || '').trim() === decodePin(); }
+
+    function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
+    async function findProductById(id) {
+      for (const name of COLLECTIONS) {
+        try {
+          const docRef = doc(db, name, id);
+          const snap = await getDoc(docRef);
+          if (snap && snap.exists()) return { id: snap.id, ...snap.data(), _collection: name };
+        } catch (e) { console.warn('err find in', name, e); }
+      }
+      for (const name of COLLECTIONS) {
+        try {
+          const colRef = collection(db, name);
+          const snap = await getDocs(colRef);
+          if (!snap.empty) {
+            for (const d of snap.docs) {
+              const data = d.data();
+              if (data.slug === id || d.id === id || (data.code && data.code === id)) return { id: d.id, ...data, _collection: name };
+            }
+          }
+        } catch (e) { console.warn('err search in', name, e); }
+      }
+      return null;
+    }
+
+    function populateProductUI(p) {
+      if (!p) return;
+      document.getElementById('productTitle').textContent = p.name || p.nombre || p.title || 'Sin nombre';
+      document.getElementById('productPrice').textContent = (p.price || p.precio) == null ? 'Consultar' : ('$' + Number(p.price || p.precio).toLocaleString('es-AR'));
+      document.getElementById('productMeta').textContent = (p.brand || p.marca ? 'Marca: ' + (p.brand || p.marca) : '') + (p.presentation ? ' · ' + p.presentation : '');
+      const imageSrc = p.imageUrl || p.image || (p.images && p.images[0]) || 'https://via.placeholder.com/800x600?text=Sin+imagen';
+      const img = document.getElementById('productImage'); img.src = imageSrc; img.alt = document.getElementById('productTitle').textContent;
+      document.querySelector('#productDesc p').textContent = p.description || p.desc || p.descripcion || 'Descripción no disponible.';
+      const specs = document.getElementById('productSpecs'); specs.innerHTML = '';
+      const specList = [];
+      if (p.rendimiento) specList.push('Rendimiento: ' + p.rendimiento);
+      if (p.drying) specList.push('Secado: ' + p.drying);
+      if (p.application) specList.push('Aplicación: ' + p.application);
+      if (specList.length === 0) specs.innerHTML = '<li class="small muted">Ficha técnica no disponible.</li>';
+      else specList.forEach(s => { const li = document.createElement('li'); li.className = 'small muted'; li.textContent = s; specs.appendChild(li); });
+    }
+
+    async function loadReservations() {
+      adminPanel.innerHTML = '<div class="small muted">Cargando reservas…</div>';
+      try {
+        const col = collection(db, 'reservas');
+        const snap = await getDocs(col);
+        if (snap.empty) { adminPanel.innerHTML = '<div class="small muted">No hay reservas registradas.</div>'; return; }
+        let html = '<table><thead><tr><th>Nombre</th><th>DNI</th><th>Items</th><th>Total</th><th>Creado</th></tr></thead><tbody>';
+        snap.forEach(d => {
+          const data = d.data();
+          const items = (data.items || []).map(it => `${it.name} x${it.qty}`).join('<br>');
+          const total = data.total == null ? 'Consultar' : ('$' + Number(data.total).toLocaleString('es-AR'));
+          let created = '';
+          if (data.createdAt && data.createdAt.toDate) {
+            try { created = data.createdAt.toDate().toLocaleString(); } catch (e) { created = String(data.createdAt); }
+          } else created = '-';
+          html += `<tr><td>${escapeHtml(data.name || '-')}</td><td>${escapeHtml(data.dni || '-')}</td><td style="min-width:220px">${items || '-'}</td><td>${total}</td><td>${created}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        adminPanel.innerHTML = html;
+      } catch (err) {
+        console.error('err cargando reservas', err);
+        adminPanel.innerHTML = '<div class="small muted">Error cargando reservas (ver consola).</div>';
+      }
+    }
+
+    function openAdminModal() { adminModalBack.style.display = 'flex'; adminModalBack.setAttribute('aria-hidden', 'false'); const authed = sessionStorage.getItem('rc_admin_authed'); if (authed === '1') { adminLoginBlock.style.display = 'none'; adminContent.style.display = ''; loadReservations(); } else { adminLoginBlock.style.display = ''; adminContent.style.display = 'none'; adminPinInput.value = ''; adminLoginMsg.textContent = ''; adminPinInput.focus(); } }
+    function closeAdminModal() { adminModalBack.style.display = 'none'; adminModalBack.setAttribute('aria-hidden', 'true'); }
+
+    adminBtn.addEventListener('click', () => openAdminModal());
+    adminCloseTop.addEventListener('click', () => closeAdminModal());
+    adminModalBack.addEventListener('click', (e) => { if (e.target === adminModalBack) closeAdminModal(); });
+    adminLoginBtn && adminLoginBtn.addEventListener('click', () => {
+      const val = adminPinInput.value || '';
+      if (verifyPinInput(val)) { sessionStorage.setItem('rc_admin_authed', '1'); adminLoginMsg.textContent = ''; adminLoginBlock.style.display = 'none'; adminContent.style.display = ''; loadReservations(); } else { adminLoginMsg.style.color = '#b91c1c'; adminLoginMsg.textContent = 'PIN incorrecto.'; }
+    });
+    adminSignout && adminSignout.addEventListener('click', () => { sessionStorage.removeItem('rc_admin_authed'); adminContent.style.display = 'none'; adminLoginBlock.style.display = ''; adminLoginMsg.textContent = 'Sesión cerrada.'; });
+    refreshReservations && refreshReservations.addEventListener('click', () => loadReservations());
+
+    function goToReserveWithId(id) { if (!id) return; location.href = 'reservas.html?id=' + encodeURIComponent(id); }
+
+    (function () {
+      document.addEventListener('DOMContentLoaded', async function () {
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+        const params = new URLSearchParams(location.search);
+        const id = params.get('id') || params.get('product') || params.get('sku');
+        if (!id) { loader.textContent = 'No se indicó producto (parámetro ?id=).'; return; }
+        loader.textContent = 'Buscando producto…';
+        const product = await findProductById(id);
+        if (product) {
+          populateProductUI(product);
+          const reserveBtnEl = document.getElementById('reserveBtn');
+          if (reserveBtnEl) reserveBtnEl.addEventListener('click', () => goToReserveWithId(product.id || id));
+          loader.style.display = 'none';
+          productGrid.style.display = '';
+        } else {
+          loader.innerHTML = '<div>No se encontró el producto. Mostrando ejemplo.</div>';
+          const demo = { name: 'Pintura Acrílica Interior (demo)', price: 1200, brand: 'Marca Demo', imageUrl: 'https://via.placeholder.com/800x600?text=Producto+Demo', description: 'Demostración: no se encontró en la base de datos.', id: id };
+          populateProductUI(demo);
+          const reserveBtnEl = document.getElementById('reserveBtn');
+          if (reserveBtnEl) reserveBtnEl.addEventListener('click', () => goToReserveWithId(demo.id));
+          loader.style.display = 'none';
+          productGrid.style.display = '';
+        }
+      });
+    })();
+
+    function doSearchIndex() { var q = document.getElementById('globalSearch') ? document.getElementById('globalSearch').value.trim() : ''; if (!q) return location.href = 'productos.html'; location.href = 'productos.html?q=' + encodeURIComponent(q); }
+    adminPinInput && adminPinInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        adminLoginBtn && adminLoginBtn.click();
+      }
+      if (e.key === 'Escape') {
+        if (adminModalBack.style.display === 'flex') closeAdminModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (adminModalBack.style.display === 'flex') closeAdminModal();
+      }
+    });
+
+    window.rcAdmin = {
+      openAdminModal,
+      closeAdminModal,
+      loadReservations,
+      decodePin,
+      verifyPinInput
+    };
+
+    const reserveBtnEl = document.getElementById('reserveBtn');
+    if (reserveBtnEl) {
+      reserveBtnEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          reserveBtnEl.click();
+        }
+      });
+    }
+  </script>
+
+  <script>
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen) {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = '☰';
+      } else {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = '✖️';
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu || !btn) return;
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+        toggleSiteMenu();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

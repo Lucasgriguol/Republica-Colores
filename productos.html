@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pinturería — Productos</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+  </a>
+
+</head>
+
+<body>
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <div class="site-brand">
+        <a href="index.html" class="brand-link" aria-label="Ir al inicio"><strong>República Colores</strong></a>
+      </div>
+
+      <nav class="site-nav" role="navigation" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html" aria-current="page">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-tools">
+        <button class="site-reserve" aria-label="Reservas" onclick="location.href='reservas.html'">Reservas</button>
+        <button class="site-menu-toggle" aria-label="Abrir menú" onclick="toggleSiteMenu()"
+          aria-expanded="false">☰</button>
+      </div>
+    </div>
+
+    <div id="site-menu" class="site-menu" hidden>
+      <div class="container">
+        <ul class="site-menu__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="container products-page">
+    <h1>Productos</h1>
+    <p class="small muted">Listado de productos.</p>
+
+    <div class="filters-row">
+      <input id="filterName" placeholder="Buscar por nombre o marca" aria-label="Buscar por nombre" />
+      <select id="filterCategory" aria-label="Filtrar por categoría">
+        <option value="">Todas las categorías</option>
+      </select>
+      <button id="clearFilters" class="btn">Limpiar</button>
+    </div>
+
+    <div id="productsGrid" class="products-grid" aria-live="polite" aria-busy="true">
+      <div class="loading-center">Cargando productos…</div>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner container">
+      <div class="footer-col about">
+        <a href="index.html" class="brand-link"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 5 años.</p>
+      </div>
+      <div class="footer-col links">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="footer-col contact">
+        <h4>Contacto</h4>
+        <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+        <p class="small muted">Tel: +54 351 618 5138</p>
+        <p class="small muted">Email: <a href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
+      </div>
+      <div class="footer-col social">
+        <h4>Síguenos</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook">👍</a>
+          <a href="#" aria-label="Instagram">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom container">
+      <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPVbxfvJO-w-j6lGL-TEFeHNJRV7G1UTo",
+      authDomain: "inventario-b8fc2.firebaseapp.com",
+      projectId: "inventario-b8fc2",
+      storageBucket: "inventario-b8fc2.firebasestorage.app",
+      messagingSenderId: "184222469977",
+      appId: "1:184222469977:web:83cc7bcc7116eb43494648"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const COLLECTIONS = ['productos', 'products', 'items', 'inventario', 'productosListado'];
+    const productsGrid = document.getElementById('productsGrid');
+    const filterName = document.getElementById('filterName');
+    const filterCategory = document.getElementById('filterCategory');
+    const clearFilters = document.getElementById('clearFilters');
+
+    function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
+    function extractImageUrl(p) {
+      if (!p) return null;
+      const candidates = [
+        p.image, p.img, p.foto, p.imageUrl, p.picture, p.thumbnail, p.src, p.photo
+      ];
+      for (const c of candidates) {
+        if (c && typeof c === 'string' && c.trim()) return c.trim();
+      }
+      if (Array.isArray(p.images) && p.images.length) {
+        const first = p.images[0];
+        if (typeof first === 'string' && first.trim()) return first.trim();
+        if (first && typeof first === 'object') {
+          if (first.url) return first.url;
+          if (first.src) return first.src;
+        }
+      }
+      if (p.media && p.media.length) {
+        const m = p.media[0];
+        if (m && (m.url || m.src)) return m.url || m.src;
+      }
+      return null;
+    }
+
+    async function loadProducts() {
+      productsGrid.innerHTML = '<div class="loading-center">Cargando productos…</div>';
+      try {
+        for (const name of COLLECTIONS) {
+          try {
+            const col = collection(db, name);
+            const snap = await getDocs(col);
+            if (!snap.empty) {
+              const items = snap.docs.map(d => ({ id: d.id, ...d.data(), _collection: name }));
+              renderProducts(items);
+              populateCategories(items);
+              return;
+            }
+          } catch (e) { console.warn('err loading collection', name, e); }
+        }
+        productsGrid.innerHTML = '<div class="empty-msg">No se encontraron productos.</div>';
+      } catch (e) {
+        console.error(e);
+        productsGrid.innerHTML = '<div class="empty-msg">Error cargando productos.</div>';
+      }
+    }
+
+    function populateCategories(items) {
+      const cats = new Set();
+      items.forEach(i => { if (i.category) cats.add(i.category); });
+      filterCategory.innerHTML = '<option value="">Todas las categorías</option>';
+      Array.from(cats).sort().forEach(c => {
+        const o = document.createElement('option'); o.value = c; o.textContent = c; filterCategory.appendChild(o);
+      });
+    }
+
+    function renderProducts(items) {
+      productsGrid.innerHTML = '';
+      if (!items || items.length === 0) {
+        productsGrid.innerHTML = '<div class="empty-msg">No hay productos.</div>';
+        return;
+      }
+      items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        const name = (p.name || p.nombre || p.title || 'Producto');
+        const priceText = p.price ? ('$ ' + Number(p.price).toLocaleString('es-AR')) : 'Consultar';
+        const imageUrl = extractImageUrl(p) || 'https://via.placeholder.com/400x300?text=Sin+imagen';
+
+        const imgBox = document.createElement('div');
+        imgBox.className = 'img-box';
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = name;
+        imgBox.appendChild(img);
+
+        const h3 = document.createElement('h3');
+        h3.textContent = name;
+
+        const brandDiv = document.createElement('div');
+        brandDiv.className = 'small muted';
+        brandDiv.textContent = p.brand || p.marca || '';
+
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'price';
+        priceDiv.textContent = priceText;
+
+        const actions = document.createElement('div');
+        actions.className = 'product-actions';
+
+        const btnVer = document.createElement('button');
+        btnVer.className = 'btn btn-ghost';
+        btnVer.textContent = 'Ver';
+        btnVer.addEventListener('click', () => {
+          window.location.href = 'producto.html?id=' + encodeURIComponent(p.id);
+        });
+
+        const btnReservar = document.createElement('button');
+        btnReservar.className = 'btn btn-primary';
+        btnReservar.textContent = 'Reservar';
+        btnReservar.addEventListener('click', () => {
+          try {
+            const storedRaw = localStorage.getItem('rc_cart');
+            let cart = [];
+            try { cart = storedRaw ? JSON.parse(storedRaw) : []; } catch (e) { cart = []; }
+            const existing = cart.find(c => c.id === p.id);
+            if (existing) {
+              existing.qty = (existing.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: p.id,
+                name: name,
+                price: p.price || p.precio || null,
+                image: extractImageUrl(p) || null,
+                qty: 1,
+                _collection: p._collection || null
+              });
+            }
+            try { localStorage.setItem('rc_cart', JSON.stringify(cart)); } catch (e) { console.warn('storage err', e); }
+          } catch (e) { console.warn('err add to cart', e); }
+          window.location.href = 'reservas.html';
+        });
+
+        actions.appendChild(btnVer);
+        actions.appendChild(btnReservar);
+
+        card.appendChild(imgBox);
+        card.appendChild(h3);
+        card.appendChild(brandDiv);
+        card.appendChild(priceDiv);
+        card.appendChild(actions);
+
+        productsGrid.appendChild(card);
+      });
+    }
+
+    function applyFilters() {
+      const name = (filterName.value || '').toLowerCase();
+      const cat = (filterCategory.value || '').toLowerCase();
+      loadProducts().then(() => {
+        const cards = Array.from(document.querySelectorAll('.product-card'));
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          const matches = (!name || text.includes(name)) && (!cat || text.includes(cat));
+          card.style.display = matches ? '' : 'none';
+        });
+      });
+    }
+
+    filterName.addEventListener('input', applyFilters);
+    filterCategory.addEventListener('change', applyFilters);
+    clearFilters.addEventListener('click', () => { filterName.value = ''; filterCategory.value = ''; applyFilters(); });
+
+    loadProducts();
+  </script>
+
+  <script>
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen) {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = '☰';
+      } else {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = '✖️';
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu || !btn) return;
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+        toggleSiteMenu();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

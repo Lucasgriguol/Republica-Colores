@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Pinturería — Promociones</title>
+  <link href="styles.css" rel="stylesheet" />
+  <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+  </a>
+
+</head>
+
+<body>
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <div class="site-brand">
+        <a class="brand-link" href="index.html">República Colores</a>
+      </div>
+      <nav aria-label="Navegación principal" class="site-nav" role="navigation">
+        <ul class="site-nav__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a aria-current="page" href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </nav>
+      <div class="site-tools">
+        <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+        <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+          onclick="toggleSiteMenu()">☰</button>
+      </div>
+    </div>
+    <div class="site-menu" hidden="" id="site-menu">
+      <div class="container">
+        <ul class="site-menu__list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main class="container promos-page" id="promosMain">
+    <h1>Promociones</h1>
+    <p class="small">Promoción vigente: 3 cuotas sin interés con todas las tarjetas.</p>
+    <section aria-live="polite" class="promos-grid" id="promosSection">
+      <div class="loading-center">Cargando promociones…</div>
+    </section>
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner container">
+      <div class="footer-col about">
+        <a class="brand-link" href="index.html"><strong>República Colores</strong></a>
+        <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 5 años.</p>
+      </div>
+      <div class="footer-col links">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="index.html">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="footer-col contact">
+        <h4>Contacto</h4>
+        <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+        <p class="small muted">Tel: +54 351 618 5138</p>
+        <p class="small muted">Email: <a href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
+      </div>
+      <div class="footer-col social">
+        <h4>Síguenos</h4>
+        <div class="social-icons">
+          <a aria-label="Facebook" href="#">👍</a>
+          <a aria-label="Instagram" href="#">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom container">
+      <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados</div>
+    </div>
+  </footer>
+  <div id="promoModalBack"
+    style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:220">
+    <div id="promoModal" style="background:#fff;padding:20px;border-radius:10px;max-width:760px;width:94%;">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong id="modalTitle">Condiciones</strong>
+        <button id="modalClose"
+          style="background:#f3f6fb;border:1px solid #e6eef8;padding:8px;border-radius:8px;cursor:pointer">Cerrar</button>
+      </div>
+      <div id="modalBody" style="margin-top:12px;color:var(--muted);line-height:1.45"></div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPVbxfvJO-w-j6lGL-TEFeHNJRV7G1UTo",
+      authDomain: "inventario-b8fc2.firebaseapp.com",
+      projectId: "inventario-b8fc2",
+      storageBucket: "inventario-b8fc2.firebasestorage.app",
+      messagingSenderId: "184222469977",
+      appId: "1:184222469977:web:83cc7bcc7116eb43494648"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const globalPromo = {
+      id: 'global-3cuotas',
+      title: '3 cuotas sin interés con todas las tarjetas',
+      description: '3 cuotas sin interés con todas las tarjetas a determinadas promociones. Sujeto a verificación de entidad emisora. No acumulable. Monto mínimo: consultar en local.',
+      terms: '3 cuotas sin interés con todas las tarjetas adheridas. Sujeto a verificación de entidad emisora. No acumulable.',
+      acceptedPayments: 'Tarjetas, Efectivo y Transferencia Bancaria'
+    };
+    const secondPromo = {
+      id: 'efectivo-transferencia',
+      title: 'Pagos en efectivo y transferencias bancarias',
+      description: 'Aceptamos pagos en efectivo y transferencias bancarias. Consultá condiciones y plazos en local.',
+      terms: 'Pagos en efectivo y transferencias bancarias aceptados. Confirmar disponibilidad y montos mínimos en local.'
+    };
+
+    async function tryLoadCollections(names) {
+      for (const name of names) {
+        try {
+          const col = collection(db, name);
+          const snap = await getDocs(col);
+          if (!snap.empty) return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (e) { console.warn('err', name, e); }
+      }
+      return [];
+    }
+
+    function openModal(title, body) {
+      const back = document.getElementById('promoModalBack');
+      document.getElementById('modalTitle').textContent = title;
+      const bodyEl = document.getElementById('modalBody');
+      bodyEl.textContent = (typeof body === 'string') ? body : (body.terms || body.description || JSON.stringify(body));
+      back.style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('promoModalBack').style.display = 'none';
+    }
+
+    function renderPromos(list) {
+      const root = document.getElementById('promosSection');
+      root.innerHTML = '';
+
+      const showPromo = (p) => {
+        const card = document.createElement('div');
+        card.className = 'promo-card';
+        const title = p.title || p.name || 'Promoción';
+        const desc = p.description || p.desc || p.description || '';
+        const terms = p.terms || p.condiciones || '';
+        const accepted = p.acceptedPayments || p.accepted || '';
+
+        card.innerHTML = `
+          <div>
+            <div class="promo-title">${escapeHtml(title)}</div>
+            <div class="promo-desc">${escapeHtml(desc)}</div>
+            <div class="note-muted">${escapeHtml(accepted)}</div>
+          </div>
+          <div class="promo-actions">
+            <button class="btn btn-primary" type="button" onclick="openPromoModal_inline('${escapeJs(title)}','${escapeJs(terms || desc)}')">Ver condiciones</button>
+          </div>
+        `;
+        root.appendChild(card);
+      };
+
+      showPromo(globalPromo);
+      showPromo(secondPromo);
+
+      if (list && list.length) {
+        const note = document.createElement('div');
+        note.className = 'note-muted';
+        note.textContent = 'Promociones extra desde la base de datos:';
+        root.appendChild(note);
+        list.forEach(p => showPromo(p));
+      } else {
+        const note = document.createElement('div');
+        note.className = 'note-muted';
+        note.textContent = 'No hay promociones adicionales cargadas en Firestore.';
+        root.appendChild(note);
+      }
+    }
+
+    function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+    function escapeJs(s) { return String(s || '').replace(/'/g, "\\\\'").replace(/"/g, '\\"'); }
+
+    window.openPromoModal_inline = function (title, body) {
+      openModal(title, body);
+    };
+
+    function doSearchPromo() {
+      const q = document.getElementById('promSearch').value.trim().toLowerCase();
+      if (!q) { alert('Ingresá texto para buscar promociones'); return; }
+      const all = [globalPromo, secondPromo];
+      const found = all.find(p => (p.title || '').toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q));
+      if (found) {
+        openModal(found.title, found.terms || found.description);
+        return;
+      }
+      alert('No se encontró la promoción buscada.');
+    }
+
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu) return;
+      const isHidden = menu.hasAttribute('hidden');
+      if (isHidden) {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    (async function init() {
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
+      const loaded = await tryLoadCollections(['promos', 'promotions', 'promociones']);
+      renderPromos(loaded);
+      const modalClose = document.getElementById('modalClose');
+      const modalBack = document.getElementById('promoModalBack');
+      modalClose && modalClose.addEventListener('click', closeModal);
+      modalBack && modalBack.addEventListener('click', e => { if (e.target === modalBack) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    })();
+
+    if (window) window.doSearchPromo = doSearchPromo;
+  </script>
+  <script>if (!document.getElementById('footerYear')) { } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }</script>
+  <script>
+    function toggleSiteMenu() {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen) {
+        menu.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = '☰';
+      } else {
+        menu.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = '✖️';
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('site-menu');
+      const btn = document.querySelector('.site-menu-toggle');
+      if (!menu || !btn) return;
+      const isOpen = !menu.hasAttribute('hidden');
+      if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+        toggleSiteMenu();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

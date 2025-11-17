@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Pinturería Republica Colores</title>
+    <link href="styles.css" rel="stylesheet" />
+    <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+
+</head>
+
+<body>
+    <header class="site-header" role="banner">
+        <div class="site-header__inner container">
+            <div class="site-brand"> <a class="brand-link" href="index.html">República Colores</a> </div>
+            <nav aria-label="Navegación principal" class="site-nav" role="navigation">
+                <ul class="site-nav__list">
+                    <li><a aria-current="page" href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
+                </ul>
+            </nav>
+            <div class="site-tools">
+                <button class="site-reserve" onclick="location.href='reservas.html'">Reservas</button>
+                <button aria-expanded="false" aria-label="Abrir menú" class="site-menu-toggle"
+                    onclick="toggleSiteMenu()">☰</button>
+            </div>
+        </div>
+        <div class="site-menu" hidden="" id="site-menu">
+            <div class="container">
+                <ul class="site-menu__list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="reservas.html">Reservas</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <section aria-label="Hero destacado" class="home-hero">
+            <div class="home-hero-inner">
+                <div class="home-hero-main">
+                    <div class="home-hero-card">
+                        <h1 class="home-hero-title">República <span class="home-brand-highlight">Colores</span></h1>
+                        <p class="home-hero-sub">Soluciones en pinturas y terminaciones — Más de <strong>5
+                                años</strong> asesorando
+                            proyectos residenciales y comerciales.</p>
+                        <div aria-hidden="false" class="home-hero-features">
+                            <div class="home-feature">
+                                <div class="home-feature-dot">•</div>
+                                <div class="home-feature-text">Venta de pinturas y complementos (esmaltes, selladores,
+                                    imprimaciones y muchisimo mas).
+                                </div>
+                            </div>
+                            <div class="home-feature">
+                                <div class="home-feature-dot">•</div>
+                                <div class="home-feature-text">Asesoría de color presencial y online.</div>
+                            </div>
+                            <div class="home-feature">
+                                <div class="home-feature-dot">•</div>
+                                <div class="home-feature-text">Servicios de mezcla y fabricación de colores bajo pedido.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="home-hero-note card small muted"> Calidad garantizada en productos y atención
+                            personalizada.
+                            Trabajamos con marcas reconocidas y control de calidad en todas las mezclas. </div>
+                    </div>
+                </div>
+                <aside class="home-hero-aside">
+                    <div class="home-stack">
+                        <div class="card">
+                            <h3 style="margin:0 0 8px 0">Nuestros compromisos</h3>
+                            <p class="small muted" style="margin:0"> Calidad garantizada en productos y atención
+                                personalizada.
+                                Trabajamos con marcas reconocidas y control de calidad en todas las mezclas. </p>
+                        </div>
+                        <div class="card">
+                            <h3 style="margin:0 0 8px 0">Calidad y control</h3>
+                            <p class="small muted" style="margin:0"> Todos los tonos pasan por controles de precisión
+                                para asegurar
+                                consistencia y desempeño en obra. </p>
+                        </div>
+                        <div class="card">
+                            <h3 style="margin:0 0 8px 0">Atención personalizada</h3>
+                            <p class="small muted" style="margin:0"> Asesoría técnica y estética para cada proyecto: te
+                                ayudamos a
+                                elegir el mejor producto según superficie y uso. </p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+        <section class="container section">
+            <h2>Servicios</h2>
+            <div class="services-grid" style="margin-top:12px">
+                <div class="card service">
+                    <div class="icon">🎨</div>
+                    <div>
+                        <h4>Asesoría de color</h4>
+                        <p class="small muted">Recomendaciones técnicas y estéticas para tu espacio.</p>
+                    </div>
+                </div>
+                <div class="card service">
+                    <div class="icon">🧰</div>
+                    <div>
+                        <h4>Mezcla y tono</h4>
+                        <p class="small muted">Fabricación de colores exactos en el momento.</p>
+                    </div>
+                </div>
+                <div class="card service">
+                    <div class="icon">📄</div>
+                    <div>
+                        <h4>Presupuestos</h4>
+                        <p class="small muted">Cotizaciones claras para obra y rehabilitación.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer" role="contentinfo">
+        <div class="site-footer__inner container">
+            <div class="footer-col about"> <a class="brand-link" href="index.html"><strong>República
+                        Colores</strong></a>
+                <p class="small muted">Soluciones en pinturas y terminaciones. Calidad y asesoría desde hace más de 5
+                    años.</p>
+            </div>
+            <div class="footer-col links">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="promociones.html">Promociones</a></li>
+                    <li><a href="index.html">Inicio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contact">
+                <h4>Contacto</h4>
+                <p class="small muted">San Jerónimo 3321 • Córdoba, AR</p>
+                <p class="small muted">Tel: +54 351 618 5138</p>
+                <p class="small muted">Email: <a
+                        href="mailto:republica.colores@gmail.com">republica.colores@gmail.com</a></p>
+            </div>
+            <div class="footer-col social">
+                <h4>Síguenos</h4>
+                <div class="social-icons"> <a aria-label="Facebook" href="#">👍</a> <a aria-label="Instagram"
+                        href="#">📸</a>
+                </div>
+            </div>
+        </div>
+        <div class="site-footer__bottom container">
+            <div class="small muted">© <span id="footerYear"></span> República Colores — Todos los derechos reservados
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSiteMenu() {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen) {
+                menu.setAttribute('hidden', '');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.textContent = '☰';
+            } else {
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.textContent = '✖️';
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('site-menu');
+            const btn = document.querySelector('.site-menu-toggle');
+            if (!menu || !btn) return;
+            const isOpen = !menu.hasAttribute('hidden');
+            if (isOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+                toggleSiteMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>
