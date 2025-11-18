@@ -45,7 +45,7 @@
   </header>
   <main class="container promos-page" id="promosMain">
     <h1>Promociones</h1>
-    <p class="small">Promoción vigente: 3 cuotas sin interés con todas las tarjetas.</p>
+    <p class="small">Promociónes vigentes</p>
     <section aria-live="polite" class="promos-grid" id="promosSection">
       <div class="loading-center">Cargando promociones…</div>
     </section>
@@ -181,7 +181,7 @@
       } else {
         const note = document.createElement('div');
         note.className = 'note-muted';
-        note.textContent = 'No hay promociones adicionales cargadas en Firestore.';
+        note.textContent = '';
         root.appendChild(note);
       }
     }

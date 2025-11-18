@@ -52,24 +52,23 @@
 
     <main class="container reserva-page">
         <h1>Reservas / Presupuesto</h1>
-        <p class="small muted">Agregá productos (por ID) o pegá el ID desde la ficha de producto. Completá nombre y DNI
-            para reservar o generar un presupuesto.</p>
+        <p class="small muted"> Completá nombre y DNI para reservar o generar un presupuesto.</p>
 
         <div class="reserva-grid">
             <section class="card">
                 <div style="display:flex;gap:10px;align-items:center;">
-                    <input id="addProductId" placeholder="Ej: 123, 456, 789"
+                    <input id="addProductId" placeholder="ID"
                         style="flex:1;padding:10px;border-radius:8px;border:1px solid #eef6fb">
                     <button id="btnAdd" class="btn btn-primary">Agregar</button>
                 </div>
 
                 <div class="cart-list" id="cartList" aria-live="polite" style="margin-top:12px">
-                    <div class="empty-msg">No hay productos en la reserva. Agregá el ID de un producto para comenzar.
+                    <div class="empty-msg">No hay productos en la reserva.
                     </div>
                 </div>
 
                 <div style="margin-top:12px; display:flex; gap:8px; justify-content:space-between; align-items:center;">
-                    <div class="note-small">Los precios se toman desde el inventario (Firestore).</div>
+                    <div class="note-small"></div>
                     <button id="clearCart" class="btn">Vaciar</button>
                 </div>
             </section>
