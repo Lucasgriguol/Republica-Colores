@@ -10,8 +10,6 @@
   <a href="https://wa.me/543516185138" class="whatsapp-float" target="_blank" aria-label="Chatear por WhatsApp">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
   </a>
-
-
 </head>
 
 <body>
@@ -63,10 +61,6 @@
         <div class="product-desc" id="productDesc">
           <h3>Descripción</h3>
           <p class="small muted">Descripción de ejemplo.</p>
-          <h4 style="margin-top:12px">Ficha técnica</h4>
-          <ul class="small muted" id="productSpecs">
-            <li>Rendimiento: ~10 m² / litro</li>
-          </ul>
         </div>
       </div>
     </div>
@@ -198,14 +192,8 @@
       document.getElementById('productMeta').textContent = (p.brand || p.marca ? 'Marca: ' + (p.brand || p.marca) : '') + (p.presentation ? ' · ' + p.presentation : '');
       const imageSrc = p.imageUrl || p.image || (p.images && p.images[0]) || 'https://via.placeholder.com/800x600?text=Sin+imagen';
       const img = document.getElementById('productImage'); img.src = imageSrc; img.alt = document.getElementById('productTitle').textContent;
+      // Solo descripción (se removió la ficha técnica)
       document.querySelector('#productDesc p').textContent = p.description || p.desc || p.descripcion || 'Descripción no disponible.';
-      const specs = document.getElementById('productSpecs'); specs.innerHTML = '';
-      const specList = [];
-      if (p.rendimiento) specList.push('Rendimiento: ' + p.rendimiento);
-      if (p.drying) specList.push('Secado: ' + p.drying);
-      if (p.application) specList.push('Aplicación: ' + p.application);
-      if (specList.length === 0) specs.innerHTML = '<li class="small muted">Ficha técnica no disponible.</li>';
-      else specList.forEach(s => { const li = document.createElement('li'); li.className = 'small muted'; li.textContent = s; specs.appendChild(li); });
     }
 
     async function loadReservations() {

@@ -121,6 +121,8 @@
     const filterCategory = document.getElementById('filterCategory');
     const clearFilters = document.getElementById('clearFilters');
 
+    let ALL_PRODUCTS = [];
+
     function escapeHtml(s) { return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
 
     function extractImageUrl(p) {
@@ -146,22 +148,41 @@
       return null;
     }
 
+    function extractCategory(p) {
+      if (!p) return '';
+      const cand = (p.category || p.categoria || p.cat || p.categoryId || p.categoría || p.tipo || '').toString().trim();
+      return cand;
+    }
+
+    function extractName(p) {
+      return (p.name || p.nombre || p.title || p.producto || '').toString().trim() || 'Producto';
+    }
+
     async function loadProducts() {
       productsGrid.innerHTML = '<div class="loading-center">Cargando productos…</div>';
+      ALL_PRODUCTS = [];
       try {
         for (const name of COLLECTIONS) {
           try {
             const col = collection(db, name);
             const snap = await getDocs(col);
             if (!snap.empty) {
-              const items = snap.docs.map(d => ({ id: d.id, ...d.data(), _collection: name }));
-              renderProducts(items);
-              populateCategories(items);
-              return;
+              const items = snap.docs.map(d => ({ id: d.id, _collection: name, ...d.data() }));
+              ALL_PRODUCTS = ALL_PRODUCTS.concat(items);
             }
-          } catch (e) { console.warn('err loading collection', name, e); }
+          } catch (e) {
+            console.warn('err loading collection', name, e);
+          }
         }
-        productsGrid.innerHTML = '<div class="empty-msg">No se encontraron productos.</div>';
+
+        if (ALL_PRODUCTS.length === 0) {
+          productsGrid.innerHTML = '<div class="empty-msg">No se encontraron productos.</div>';
+          filterCategory.innerHTML = '<option value="">Todas las categorías</option>';
+          return;
+        }
+
+        populateCategories(ALL_PRODUCTS);
+        renderProducts(ALL_PRODUCTS);
       } catch (e) {
         console.error(e);
         productsGrid.innerHTML = '<div class="empty-msg">Error cargando productos.</div>';
@@ -170,9 +191,12 @@
 
     function populateCategories(items) {
       const cats = new Set();
-      items.forEach(i => { if (i.category) cats.add(i.category); });
+      items.forEach(i => {
+        const c = extractCategory(i);
+        if (c) cats.add(c);
+      });
       filterCategory.innerHTML = '<option value="">Todas las categorías</option>';
-      Array.from(cats).sort().forEach(c => {
+      Array.from(cats).sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' })).forEach(c => {
         const o = document.createElement('option'); o.value = c; o.textContent = c; filterCategory.appendChild(o);
       });
     }
@@ -183,13 +207,18 @@
         productsGrid.innerHTML = '<div class="empty-msg">No hay productos.</div>';
         return;
       }
+      const fragment = document.createDocumentFragment();
       items.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
 
-        const name = (p.name || p.nombre || p.title || 'Producto');
-        const priceText = p.price ? ('$ ' + Number(p.price).toLocaleString('es-AR')) : 'Consultar';
+        const name = extractName(p);
+        const priceNum = p.price ?? p.precio ?? null;
+        const priceText = priceNum ? ('$ ' + Number(priceNum).toLocaleString('es-AR')) : 'Consultar';
         const imageUrl = extractImageUrl(p) || 'https://via.placeholder.com/400x300?text=Sin+imagen';
+        const category = extractCategory(p);
+
+        card.dataset.category = category.toLowerCase();
 
         const imgBox = document.createElement('div');
         imgBox.className = 'img-box';
@@ -204,6 +233,10 @@
         const brandDiv = document.createElement('div');
         brandDiv.className = 'small muted';
         brandDiv.textContent = p.brand || p.marca || '';
+
+        const catSpan = document.createElement('div');
+        catSpan.className = 'small category muted';
+        catSpan.textContent = category;
 
         const priceDiv = document.createElement('div');
         priceDiv.className = 'price';
@@ -234,7 +267,7 @@
               cart.push({
                 id: p.id,
                 name: name,
-                price: p.price || p.precio || null,
+                price: priceNum || null,
                 image: extractImageUrl(p) || null,
                 qty: 1,
                 _collection: p._collection || null
@@ -251,29 +284,38 @@
         card.appendChild(imgBox);
         card.appendChild(h3);
         card.appendChild(brandDiv);
+        card.appendChild(catSpan);
         card.appendChild(priceDiv);
         card.appendChild(actions);
 
-        productsGrid.appendChild(card);
+        fragment.appendChild(card);
       });
+      productsGrid.appendChild(fragment);
     }
 
-    function applyFilters() {
-      const name = (filterName.value || '').toLowerCase();
-      const cat = (filterCategory.value || '').toLowerCase();
-      loadProducts().then(() => {
-        const cards = Array.from(document.querySelectorAll('.product-card'));
-        cards.forEach(card => {
-          const text = card.textContent.toLowerCase();
-          const matches = (!name || text.includes(name)) && (!cat || text.includes(cat));
-          card.style.display = matches ? '' : 'none';
-        });
+    function applyFiltersImmediate() {
+      const name = (filterName.value || '').toLowerCase().trim();
+      const cat = (filterCategory.value || '').toLowerCase().trim();
+
+      const filtered = ALL_PRODUCTS.filter(p => {
+        const pname = (extractName(p) + ' ' + (p.brand || p.marca || '') + ' ' + extractCategory(p)).toLowerCase();
+        const matchesName = !name || pname.includes(name);
+        const matchesCat = !cat || extractCategory(p).toLowerCase() === cat;
+        return matchesName && matchesCat;
       });
+
+      renderProducts(filtered);
+    }
+
+    let debounceTimer = null;
+    function applyFilters() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(applyFiltersImmediate, 180);
     }
 
     filterName.addEventListener('input', applyFilters);
     filterCategory.addEventListener('change', applyFilters);
-    clearFilters.addEventListener('click', () => { filterName.value = ''; filterCategory.value = ''; applyFilters(); });
+    clearFilters.addEventListener('click', () => { filterName.value = ''; filterCategory.value = ''; applyFiltersImmediate(); });
 
     loadProducts();
   </script>
