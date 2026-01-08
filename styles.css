@@ -345,7 +345,8 @@ p.small {
   border-radius: 10px;
   padding: 14px;
   box-shadow: 0 10px 30px rgba(16, 24, 40, 0.04);
-  border: 1px solid rgba(16, 24, 40, 0.03)
+  border: 1px solid rgba(16, 24, 40, 0.03);
+  margin-top: 3px;
 }
 
 @media (max-width:900px) {
